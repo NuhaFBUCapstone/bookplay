@@ -3,14 +3,14 @@ import "./LoggedOut.css"
 import axios from "axios"
 import { useState, useEffect } from "react"
 import LoginForm from "../LoginForm/LoginForm"
-import ReactLoading from "react-loading"
-import img1 from './header.png';
+import img1 from './header.png'
+import test from './test.png'
 
 export default function LoggedOut(props) {
     return (
         <div className="logged-out">
             <div className="header">
-                <img src={img1}/>
+                <img src={test}/>
             </div>
             <div className={props.sessionToken ? "hidden" : "box1"}>
                 <div className="box">

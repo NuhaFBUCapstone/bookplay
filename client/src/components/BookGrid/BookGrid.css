@@ -17,6 +17,11 @@
 .search-page {
     display: flex;
 }
+.load {
+    align-self: center;
+    width: 72%;
+    text-align: center;
+}
 .side {
     width: 28%;
     left: 0px;
