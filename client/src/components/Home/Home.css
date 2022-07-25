@@ -1,4 +1,4 @@
-.logged-in-home {
+.recents-title {
     background-color: rgb(225, 207, 190);
     padding: 10px;
 }
@@ -10,6 +10,7 @@
 }
 .recents-image {
     height: 200px;
+    border: 0.5px solid ;
 }
 .logged-out-home {
     background-color: rgb(225, 207, 190); 

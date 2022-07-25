@@ -15,7 +15,7 @@ h3 {
     font-size: 24px;
 }
 .header img {
-    width: 50%;
+    width: 100%;
     height: auto;
 }
 .about-text {
@@ -26,7 +26,7 @@ h3 {
 }
 
 .header {
-    padding: 12px;
+
     padding-bottom: 0px;
     background-color: rgb(225, 207, 190);    
     font-size: 40px;

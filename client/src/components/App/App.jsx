@@ -16,6 +16,12 @@ export default function App() {
     const [trends, setTrends] = useState([])
     const [fetching, setFetching] = useState(false)
     const [lists, setLists] = useState([])
+    const [recs, setRecs] = useState([])
+
+    async function getRecs() {
+        const response = await axios.get(`http://localhost:3001/recs/${sessionToken}`)
+        setRecs(response.data)
+    }
 
     /**
      * get trending books for landing page
@@ -28,6 +34,7 @@ export default function App() {
     }
     useEffect(() => {
         getTrending()
+        getRecs()
       },[])
 
     return (
@@ -37,7 +44,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<LoggedOut lists={lists} setLists={setLists} trends={trends} fetching={fetching} 
                 sessionToken={sessionToken} setSessionToken={setSessionToken}/>}/>
-                <Route path="/home" element={<Home sessionToken={sessionToken}/>}/>
+                <Route path="/home" element={<Home sessionToken={sessionToken} recs={recs}/>}/>
                 <Route path="/search" element={<BookGrid/>}/>
                 <Route path="/book/:id" element={<BookDetail sessionToken={sessionToken} lists={lists}/>}/>
                 <Route path="/library" element={<Library lists={lists} setLists={setLists} sessionToken={sessionToken} />}/>
