@@ -5,9 +5,6 @@ var cors = require('cors');
 
 router.use(cors())
 
-const MASTERKEY = "6wssvUvxnn7VBB0mUhboQM7F7TaaBKk8sU1Ic6vE"
-Parse.initialize("3PRkrcUCakVV2GzHDYS5svrNa7CK5TBD7WfiNogY", "QThaAFJyq0JMnn4yytCSPJUt9kdFqffclXAZeYBA", MASTERKEY);
-
 /**
  * create review and rating
  */
@@ -40,11 +37,6 @@ router.post('/add/:id', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        // let query = new Parse.Query("_Session")
-        // query.equalTo("sessionToken", req.body.sessionToken)
-        // let userId = await query.first({useMasterKey : true})
-        // //get user id using session
-        // userId = userId.attributes.user.id
         let reviewQuery = new Parse.Query("Reviews")
         reviewQuery.equalTo("bookId", req.params.id)
         const review = await reviewQuery.find({useMasterKey : true})

@@ -14,11 +14,14 @@
     font-family: serif;
     line-height: 40px;
 }
-
+.review-label {
+    vertical-align: top;
+}
 .review-type {
     border-radius: 5px;
     padding: 6px;
     margin: 3px;
+    /* height: 50px; */
 }
 .details {
     font-size: 23px;

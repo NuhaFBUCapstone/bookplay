@@ -5,8 +5,24 @@ var cors = require('cors');
 
 router.use(cors())
 
-const MASTERKEY = "6wssvUvxnn7VBB0mUhboQM7F7TaaBKk8sU1Ic6vE"
-Parse.initialize("3PRkrcUCakVV2GzHDYS5svrNa7CK5TBD7WfiNogY", "QThaAFJyq0JMnn4yytCSPJUt9kdFqffclXAZeYBA", MASTERKEY);
+/**
+ * get user's recent books to display on home page
+ */
+router.get('/recent/:sessionToken', async (req, res) => {
+    try {
+        let query = new Parse.Query("_Session")
+        query.equalTo("sessionToken", req.params.sessionToken)
+        let user = await query.first({useMasterKey : true})
+        user = user.attributes.user.id
+        let bookQuery = new Parse.Query("Books")
+        bookQuery.equalTo("userId", user)
+        bookQuery.descending("createdAt")
+        let books = await bookQuery.find({useMasterKey : true})
+        res.status(200).send(books.slice(0, 5))
+    } catch (err) {
+        res.status(400).send({"error" : "couldn't get recent" + err })
+    }
+})
 
 /**
  * add a book to a list
@@ -14,13 +30,10 @@ Parse.initialize("3PRkrcUCakVV2GzHDYS5svrNa7CK5TBD7WfiNogY", "QThaAFJyq0JMnn4yyt
 router.post('/add/:id', async (req, res) => {
     try {
         //TODO: check if book is already in that list, no duplicates
-        //could be simplified if you saved user instead of session token
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", req.body.sessionToken)
         let objId = await query.first({useMasterKey : true})
-        //get user id using session
         objId = objId.attributes.user.id
-        //create books entry
         const Books = Parse.Object.extend("Books")
         let book = new Books()
         book.set("bookId", req.params.id)
@@ -53,7 +66,6 @@ router.post('/remove/:id', async (req, res) => {
         book.equalTo("userId", objId)
         book.equalTo("list", req.body.list)
         let response = await book.first()
-        console.log(response)
         if (response) {
             //if book exists:
             await response.destroy()

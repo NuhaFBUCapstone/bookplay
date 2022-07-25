@@ -1,3 +1,16 @@
+.logged-in-home {
+    background-color: rgb(225, 207, 190);
+    padding: 10px;
+}
+.recents-outer {
+    margin: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px
+}
+.recents-image {
+    height: 200px;
+}
 .logged-out-home {
     background-color: rgb(225, 207, 190); 
     width: 40%;

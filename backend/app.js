@@ -27,18 +27,12 @@ Parse.serverURL = 'http://parseapi.back4app.com/'
 app.post('/logout', async (req, res) => {
   try {
   let query = new Parse.Query("_Session")
-
   query.equalTo("sessionToken", req.body.sessionToken)
-
   query.first( { useMasterKey : true}).then(function (user) {
     if (user) {
       user
-      .destroy(
-        {useMasterKey: true}
-      )
-      .then ( function(res) {
-        return;
-      })
+      .destroy({useMasterKey: true})
+      .then (res.status(200).send("logged out"))
       .catch(function (err) {
         res.status(400)
         res.send({ Message: err.message, typeStatus: "danger"});
@@ -51,7 +45,6 @@ app.post('/logout', async (req, res) => {
 
 }
 })
-
 
 
 app.post('/login', async (req, res) => {

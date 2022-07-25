@@ -26,7 +26,6 @@ export default function Playlist() {
             window.location.hash = ""
             window.localStorage.setItem("token", token)
             setToken(token)
-            console.log(token)
         }
       },[])    
 
@@ -43,7 +42,7 @@ export default function Playlist() {
             })
             setResults(response.data.tracks)
         } catch (err) {
-            console.log(err)
+            alert("Couldn't get songs.")
         }
         //will return all the songs
         //print out pics, titles

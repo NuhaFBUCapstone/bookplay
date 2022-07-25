@@ -14,7 +14,6 @@ export default function BookDetail(props) {
     const [reviews, setReviews] = useState([])
     const [myReview, setMyReview] = useState("")
     const [myRating, setMyRating] = useState(0)
-
     
     /**
      * get dropdown options
@@ -29,7 +28,7 @@ export default function BookDetail(props) {
             })
             setOpts(temp)
         } catch (err) {
-            console.log(err)
+            alert(`Couldn't get list options: ${err}`)
         }
     }
 
@@ -40,19 +39,17 @@ export default function BookDetail(props) {
         try {
             setFetching(true)
             const response = await axios.get(`https://www.googleapis.com/books/v1/volumes/${params.id}`)
-            console.log(response.data)
             setBook(response.data)
             const reviewResponse = await axios.get(`http://localhost:3001/reviews/${response.data.id}`)
             setReviews(reviewResponse.data)
         } catch (err) {
-            console.log(`error getting book details: ${err}`)
             setBook(undefined)
         }
         setFetching(false)
     }
     useEffect(() => {
         getDetails()
-        {if (props.sessionToken!=="") getDropdown()}
+        {if (props.sessionToken!==null) getDropdown()}
     }, [])
 
     /**
@@ -65,12 +62,14 @@ export default function BookDetail(props) {
                 "sessionToken": props.sessionToken, "list": list, "title": book.volumeInfo?.title,
                 "image": getImage(), "author": book.volumeInfo?.authors ? book.volumeInfo?.authors[0] : "[unknown]"
             })
-            console.log(response.data)
         } catch (err) {
-            console.log(err)
+            alert("Couldn't add book.")
         }
     }
 
+    /**
+     * add review and rating to database and display on page
+     */
     async function addReview() {
         try {
             const response = await axios.post(`http://localhost:3001/reviews/add/${book.id}`, {
@@ -78,7 +77,7 @@ export default function BookDetail(props) {
             })
             setReviews(prev => [...prev, response.data])     
         } catch (err) {
-            console.log(err)
+            alert("Couldn't add review.")
         }
     }
 
@@ -118,16 +117,37 @@ export default function BookDetail(props) {
                 </div><br/>
                 <h2>Ratings and Reviews:</h2>
                 <form className={props.sessionToken===null ? "hidden" : "review"}>
-                    <label>Your Review: </label>
-                    <input className="review-type" type="text" placeholder="Thoughts?" onChange={(e) => {
+                    <label className="review-label">Your Review: </label>
+                    <textarea className="review-type" type="text" placeholder="Thoughts?" rows={5} cols={40}
+                    onChange={(e) => {
                     setMyReview(e.target.value)
                 }}/>
-                    <input className="rating-type" type="radio" value="1"/>
-                    <input type="submit" value="Send" onClick={(e) => {e.preventDefault(); addReview()}}/>
+                <br/> Your Rating: 
+                <div onChange={(e) => {setMyRating(parseInt(e.target.value))}}>
+                    <input name="rating-type" id="1" type="radio" value="1"/>
+                    <label htmlFor="1">1</label>
+                    <input name="rating-type" id="2" type="radio" value="2"/>
+                    <label htmlFor="2">2</label>
+                    <input name="rating-type" id="3" type="radio" value="3"/>
+                    <label htmlFor="3">3</label>
+                    <input name="rating-type" id="4" type="radio" value="4"/>
+                    <label htmlFor="4">4</label>
+                    <input name="rating-type" id="5" type="radio" value="5"/>
+                    <label htmlFor="5">5</label>
+                    <input name="rating-type" id="none" type="radio" value="0"/>
+                    <label htmlFor="none">No Rating</label>
+                </div>
+                <br/>
+                    <input type="submit" value="Send" onClick={(e) => {e.preventDefault(); 
+                        if (myReview.trim().length!==0) addReview()}}/>
                 </form>
                 <div className="ratings">{reviews.slice().reverse().map(r => {
                     return <div key={r.objectId}>
-                        <p>{r.username}: {r.review} <br/> Rating: {r.rating}/5 <br/> Created at: {r.createdAt}</p>
+                        <p>{r.username}: {r.review} 
+                        <br/> 
+                        {r.rating===0 ? "" : `Rating: ${r.rating}/5`} 
+                        {r.rating===0 ? "" : <br/>} 
+                        Created at: {new Date(Date.parse(r.createdAt)).toLocaleString()}</p>
                         </div>
                 })}</div>
             </div>

@@ -4,23 +4,20 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import LoginForm from "../LoginForm/LoginForm"
 import ReactLoading from "react-loading"
+import img1 from './header.png';
 
 export default function LoggedOut(props) {
     return (
         <div className="logged-out">
             <div className="header">
-                <img src="https://images.gr-assets.com/hostedimages/1655747882ra/33078100.gif"/>
-                {/* "Meet your next favorite book." */}
+                <img src={img1}/>
             </div>
-            <div className="box1">
-                {props.sessionToken===null ? 
+            <div className={props.sessionToken ? "hidden" : "box1"}>
                 <div className="box">
                     <LoginForm setSessionToken={props.setSessionToken} sessionToken={props.sessionToken}/>
-                </div> : ""}
-            {/* <br></br> */}
-                {/* {props.sessionToken==="" ?  <div className="box"><RegisterForm setSessionToken={props.setSessionToken}/></div> : ""} */}
+                </div>
             </div>
-            <h1>Today's Trending Books:</h1>
+            <h2 className="text-header">Today's Trending Books:</h2>
             {props.fetching ? <h3>Loading...</h3> :
             <div className="trend-box">
                 {props.trends?.map((b, idx) => {
@@ -30,7 +27,7 @@ export default function LoggedOut(props) {
                     </div>
                 })}
             </div> }
-            <h2 className="about-us-header">About Us</h2>
+            <h2 className="text-header">About Us</h2>
             <div className="about-us">
                     <p className="about-text">
                         Readable is a website designed to make reading a full experience. 
