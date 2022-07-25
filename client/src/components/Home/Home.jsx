@@ -4,8 +4,9 @@ import {Link} from "react-router-dom"
 import axios from "axios"
 import { useState, useEffect } from "react"
 
-export default function Home({sessionToken}) {
+export default function Home({sessionToken, recs}) {
     const [recents, setRecents] = useState([])
+
 
     async function getRecent() {
         try {
@@ -13,11 +14,11 @@ export default function Home({sessionToken}) {
             setRecents(recentResponse.data)
         }
         catch (err) {
-            alert("Couldn't load recommendations.")
+            alert("Couldn't load recent activity.")
         }
     }
     useEffect(() => {
-        getRecent()
+        {if (sessionToken!==null) getRecent()}
       },[])
 
     return (
@@ -27,6 +28,7 @@ export default function Home({sessionToken}) {
                 <Link to="/">Click to login</Link>
             </div>
             <div className={sessionToken===null ? "hidden" : "logged-in-home"}>
+                <div className="recents-title">
                 <h2>Recent Activity</h2>
                 <div className="recents-outer">
                 {recents.map(b => {
@@ -36,7 +38,17 @@ export default function Home({sessionToken}) {
                         Saved on: {new Date(Date.parse(b.createdAt)).toDateString()}
                         </div>
                 })}
-                </div>
+                </div></div><br/>
+                <div className="recents-title">
+                <h2>Recommendations</h2>
+                <div className="recents-outer">
+                    {recs?.map(b => {
+                        return <div className="recents" key={b.objectId}>
+                            <Link to={`/book/${b.bookId}`}><img className="recents-image" src={b.image}/><br/></Link>
+                            {b.title}<br/>
+                        </div>
+                    })}
+                </div></div>
             </div>            
         </div>
     )
