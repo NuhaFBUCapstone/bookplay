@@ -11,7 +11,6 @@ export default function Home({sessionToken}) {
         try {
             const recentResponse = await axios.get(`http://localhost:3001/books/recent/${sessionToken}`)
             setRecents(recentResponse.data)
-            console.log(recentResponse.data)
         }
         catch (err) {
             alert("Couldn't load recommendations.")

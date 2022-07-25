@@ -15,7 +15,6 @@ export default function LoginForm(props) {
 
         const login = async () => {
             try {
-                console.log("Logging in")
                 const res = await axios.post(`http://localhost:3001/login`, {
                     "username" : username.current.value,
                     "password" : password.current.value
@@ -25,7 +24,6 @@ export default function LoginForm(props) {
                 navigate("/home")
             } catch (err) {
                 alert("Wrong username or password.")
-                console.log(err)
             }
         }
 
@@ -44,7 +42,6 @@ export default function LoginForm(props) {
                 navigate("/home")
             } catch (err) {
                 alert(err.response.data)
-                console.log(err)
             }
         }
 

@@ -15,10 +15,9 @@ export default function Library({sessionToken}) {
     async function getLists() {
         try {
             const response = await axios.get(`http://localhost:3001/library/${sessionToken}`)
-            console.log(response.data)
             setBooks(response.data)
         } catch (err) {
-            console.log(err)
+            alert("Couldn't get lists.")
         }
     }
     useEffect(() => {
@@ -43,9 +42,8 @@ export default function Library({sessionToken}) {
                 ...prev,
                 ...books[adding] = []
             }))
-            console.log(books)
         } catch (err) {
-            console.log(err)
+            alert("")
         }
         setAdding("")
     }
@@ -66,20 +64,22 @@ export default function Library({sessionToken}) {
             }))
             setList("")        
         } catch (err) {
-            console.log(err)
+            alert("Couldn't delete list.")
         }
     }
 
+    /**
+     * deletes book from specific list
+     */
     async function deleteBook(e, bookId) {
         e.preventDefault();
-        console.log(`in delete for ${bookId}`)
         try {
             await axios.post(`http://localhost:3001/books/remove/${bookId}`, {
                 "sessionToken": sessionToken, "list": list
             })
             getLists() //very slow!
         } catch (err) {
-            console.log(err)
+            alert("Couldn't delete book.")
         }
         return;
     }

@@ -28,7 +28,7 @@ export default function BookDetail(props) {
             })
             setOpts(temp)
         } catch (err) {
-            console.log(err)
+            alert(`Couldn't get list options: ${err}`)
         }
     }
 
@@ -43,7 +43,6 @@ export default function BookDetail(props) {
             const reviewResponse = await axios.get(`http://localhost:3001/reviews/${response.data.id}`)
             setReviews(reviewResponse.data)
         } catch (err) {
-            console.log(`error getting book details: ${err}`)
             setBook(undefined)
         }
         setFetching(false)
@@ -63,12 +62,14 @@ export default function BookDetail(props) {
                 "sessionToken": props.sessionToken, "list": list, "title": book.volumeInfo?.title,
                 "image": getImage(), "author": book.volumeInfo?.authors ? book.volumeInfo?.authors[0] : "[unknown]"
             })
-            console.log(response.data)
         } catch (err) {
-            console.log(err)
+            alert("Couldn't add book.")
         }
     }
 
+    /**
+     * add review and rating to database and display on page
+     */
     async function addReview() {
         try {
             const response = await axios.post(`http://localhost:3001/reviews/add/${book.id}`, {
@@ -76,7 +77,7 @@ export default function BookDetail(props) {
             })
             setReviews(prev => [...prev, response.data])     
         } catch (err) {
-            console.log(err)
+            alert("Couldn't add review.")
         }
     }
 

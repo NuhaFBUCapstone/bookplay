@@ -22,12 +22,8 @@ export default function App() {
      */
     async function getTrending() {
         setFetching(true)
-        try {
-            const response = await axios.get(`https://openlibrary.org/trending/daily.json`)
-            setTrends(response.data.works.slice(0, 7))
-        } catch (err) {
-            console.log(err)
-        }
+        const response = await axios.get(`https://openlibrary.org/trending/daily.json`)
+        setTrends(response.data.works.slice(0, 7))
         setFetching(false)
     }
     useEffect(() => {

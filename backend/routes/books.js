@@ -66,7 +66,6 @@ router.post('/remove/:id', async (req, res) => {
         book.equalTo("userId", objId)
         book.equalTo("list", req.body.list)
         let response = await book.first()
-        console.log(response)
         if (response) {
             //if book exists:
             await response.destroy()
