@@ -36,3 +36,40 @@
     padding: 8px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+.friends {
+    padding: 12px;
+    font-size: 18px;
+    display: block;
+}
+.friends input {
+    border-radius: 5px;
+    border: 1px solid;
+    padding: 6px;
+}
+.search-friends {
+    float: left;
+    width: 50%;
+}
+.requests {
+    float: right;
+    width: 50%;
+}
+.user button {
+    padding: 3px;
+    margin: 10px;
+}
+.request-names button {
+    margin: 7px;
+    padding: 3px;
+    font-size: 11px;
+}
+.refresh {
+    margin: 9px;
+    padding: 3px;
+    padding-bottom: 0.5px;
+    border-radius: 15px;
+}
+
+.requests img {
+    height: 15px;
+}

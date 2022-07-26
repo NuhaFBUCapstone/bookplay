@@ -3,14 +3,14 @@ import "./LoggedOut.css"
 import axios from "axios"
 import { useState, useEffect } from "react"
 import LoginForm from "../LoginForm/LoginForm"
-import img1 from './header.png'
-import test from './test.png'
+import header from './test.png'
+import aboutImg from './about.png'
 
 export default function LoggedOut(props) {
     return (
         <div className="logged-out">
             <div className="header">
-                <img src={test}/>
+                <img src={header}/>
             </div>
             <div className={props.sessionToken ? "hidden" : "box1"}>
                 <div className="box">
@@ -30,10 +30,12 @@ export default function LoggedOut(props) {
             <h2 className="text-header">About Us</h2>
             <div className="about-us">
                     <p className="about-text">
-                        Readable is a website designed to make reading a full experience. 
+                        This website is designed to make reading a full experience. 
                         With personalized playlists for any book you're reading, you always have 
-                        something to listen to that lets you fully engage with your next read.
-                        </p>
+                        something to listen to that lets you fully engage with your next read. 
+                        Create lists, save books, and share your thoughts with friends!
+                    </p>
+                    <img src={aboutImg}/>
                 </div>
         </div>
     )

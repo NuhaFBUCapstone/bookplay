@@ -4,7 +4,9 @@ const router = express.Router()
 var cors = require('cors');
 
 router.use(cors())
-
+/**
+ * get recommended books based on other readers who have the same book saved
+ */
 router.get('/:sessionToken', async (req, res) => {
     //using the most recent positively reviewed book to create recs:
     let query = new Parse.Query("_Session")

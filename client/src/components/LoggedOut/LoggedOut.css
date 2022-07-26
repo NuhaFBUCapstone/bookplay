@@ -6,8 +6,16 @@ h3 {
 }
 
 .about-us {
+    display: inline-block;
     background-color: rgb(225, 207, 190);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.about-us img {
+    float: right;
+    width: 20%;
+    height: auto;
+    padding: 30px;
+    max-width: 380px;
 }
 .text-header {
     margin: 18px;
@@ -19,10 +27,12 @@ h3 {
     height: auto;
 }
 .about-text {
-    inline-size: 57%; 
+    /* inline-size: 57%;  */
     font-size: 20px;
     line-height: 45px;
     margin-left: 30px;
+    width: 70%;
+    float: left;
 }
 
 .header {
@@ -45,6 +55,9 @@ h3 {
 }
 
 .trends {
+    border: 0.5px solid;
+    display: block;
+    margin: auto;
     height: 200px;
     width: auto;
 }
@@ -82,9 +95,6 @@ padding: 20px;
     padding: 17px;
     background-color: white;
     margin-left: 20px;
-    /* box-shadow: 10px 10px 38px -16px rgba(0,0,0,0.72);
-    -webkit-box-shadow: 10px 10px 38px -16px rgba(0,0,0,0.72);
-    -moz-box-shadow: 10px 10px 38px -16px rgba(0,0,0,0.72); */
     box-shadow: 10px 10px 38px -19px rgba(0,0,0,0.59);
     -webkit-box-shadow: 10px 10px 38px -19px rgba(0,0,0,0.59);
     -moz-box-shadow: 10px 10px 38px -19px rgba(0,0,0,0.59);

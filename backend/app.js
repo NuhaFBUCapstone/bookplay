@@ -7,6 +7,7 @@ const bookRoute = require("./routes/books")
 const libraryRoute = require("./routes/library")
 const reviewRoute = require("./routes/reviews")
 const recRoute = require("./routes/recommendations")
+const friendRoute = require("./routes/friends")
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use("/books", bookRoute)
 app.use("/library", libraryRoute)
 app.use("/reviews", reviewRoute)
 app.use("/recs", recRoute)
+app.use("/friends", friendRoute)
 
 const MASTERKEY = "6wssvUvxnn7VBB0mUhboQM7F7TaaBKk8sU1Ic6vE"
 const APPKEY = "3PRkrcUCakVV2GzHDYS5svrNa7CK5TBD7WfiNogY"
