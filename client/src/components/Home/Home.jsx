@@ -5,51 +5,76 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import img from './refresh.png'
 
-export default function Home({sessionToken, recs}) {
+export default function Home({sessionToken}) {
     const [recents, setRecents] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
-    const [results, setResults] = useState({})
+    const [searchResults, setSearchResults] = useState({})
     const [pending, setPending] = useState([])
+    const [friends, setFriends] = useState({})
+    const [recs, setRecs] = useState([])
+    const [isSent, setIsSent] = useState(false)
+
+
+    const message = () => {
+        setIsSent(true)
+        setTimeout(() => {setIsSent(false); setSearchResults({})}, 1200)
+    }
+    
+    async function getRecs() {
+        const response = await axios.get(`http://localhost:3001/recs/${sessionToken}`)
+        setRecs(response.data)
+    }
+
 
     async function getUsers() {
-        if (!searchTerm) return 
-        const response = await axios.get(`http://localhost:3001/friends/users/${searchTerm}`)
-        setResults(response.data)
+        if (!searchTerm) return
+        try { 
+            const response = await axios.get(`http://localhost:3001/friends/users?name=${searchTerm}&sessionToken=${sessionToken}`)
+            setSearchResults(response.data)
+        } catch (err) {
+            alert("Couldn't search for users")
+        }
     }
 
     async function sendRequest(e) {
         e.preventDefault()
         try {
             const response = await axios.post(`http://localhost:3001/friends/send/${sessionToken}`, {
-                "friend": results
+                "friend": searchResults
             })
         } catch (err) {
-            alert(err)
+            alert(err.response.data.message)
         }
     }
-    async function seeRequests(e) {
-        e.preventDefault()
+    async function seeRequests() {
         try {
-            const response = await axios.get(`http://localhost:3001/friends/seeReqs/${sessionToken}`, {
-                "friend": results
-            })
+            const response = await axios.get(`http://localhost:3001/friends/seeReqs/${sessionToken}`)
             setPending(response.data)
         } catch (err) {
-            alert(err)
+            alert("Couldn't load friend requests")
         }
     }
-    async function acceptReq(e, name) {
+    async function handleReq(e, name, status) {
         e.preventDefault()
         try {
-            const response = await axios.post(`http://localhost:3001/friends/accept/${name}`, {
+            await axios.post(`http://localhost:3001/friends/${status}/${name}`, {
                 "sessionToken": sessionToken
             })
-            console.log(response)
+            seeRequests()
+            getFriends()
         } catch (err) {
-            alert(err)
+            alert("Couldn't accept friend request")
         }
     }
 
+    async function getFriends() {
+        try {
+            const response = await axios.get(`http://localhost:3001/friends/list/${sessionToken}`)
+            setFriends(response.data)
+        } catch {
+            alert("Couldn't load friends.")
+        }
+    }
 
     async function getRecent() {
         try {
@@ -61,13 +86,20 @@ export default function Home({sessionToken, recs}) {
         }
     }
     useEffect(() => {
-        {if (sessionToken!==null) getRecent()}
+        {if (sessionToken!==null) {
+            getRecent()
+            getRecs()
+            getFriends()
+            seeRequests()
+        }}
+        // {if (sessionToken!==null) getFriends()}
+        // {if (sessionToken!==null) getRecs()}
       },[])
 
     return (
         <div className="home">
             <div className={sessionToken===null ? "logged-out-home" : "hidden"}>
-                <p>Must login to view this page</p>
+                <p>Must login to view home page</p>
                 <Link to="/">Click to login</Link>
             </div>
             <div className={sessionToken===null ? "hidden" : "logged-in-home"}>
@@ -84,8 +116,11 @@ export default function Home({sessionToken, recs}) {
                 </div></div><br/>
                 <div className="recents-title">
                 <h2>Recommendations</h2>
-                <p>People who read books you liked also read: </p>
+                <p className={recs.length!==0? "show" : "hidden"}>People who read books you liked also read: </p>
                 <div className="recents-outer">
+                    <div className={recs.length!==0 ? "hidden" : "show"}>
+                        You haven't interacted with enough books to generate recommendations.
+                    </div>
                     {recs?.map(b => {
                         return <div className="recents" key={b.objectId}>
                             <Link to={`/book/${b.bookId}`}><img className="recents-image" src={b.image}/><br/></Link>
@@ -100,25 +135,39 @@ export default function Home({sessionToken, recs}) {
                             onChange={(e) => {setSearchTerm(e.target.value)}}>
                         </input>
                         <input type="submit" value="search" onClick={(e) => {e.preventDefault(); getUsers()}}/>
-                        <input type="reset" value="clear" onClick={(e) => {setSearchTerm(""); setResults({})}}></input>
+                        <input type="reset" value="clear" onClick={(e) => {setSearchTerm(""); setSearchResults({})}}></input>
                         <br/><br/>
-                        <div className={Object.keys(results).length===0 ? "no-res" : "hidden"}>No Results Found</div>
-                        <div className={Object.keys(results).length!==0 ? "res" : "hidden"}>
-                            {results.username}, joined on {new Date(Date.parse(results.createdAt)).toLocaleDateString()}
-                            <button onClick={(e) => sendRequest(e)}>send friend request</button>
+                        <div className={isSent ? "colored" : "hidden"}> Sent request to {searchResults.username}!</div>
+                        <div className={Object.keys(searchResults).length===0 ? "no-res" : "hidden"}>No Results Found</div>
+                        <div className={Object.keys(searchResults).length!==0 ? "res" : "hidden"}>
+                            {searchResults.username}, joined on {new Date(Date.parse(searchResults.createdAt)).toLocaleDateString()}
+                            <button className={isSent ? "hidden" : "send-btn"} onClick={(e) => {
+                                sendRequest(e);
+                                setSearchTerm(""); 
+                                message();
+                            }}>send friend request</button>
                         </div>
                     
                     </form>
                     <div className="requests">
                         Your friend requests:
-                        <button className="refresh" onClick={(e) => {seeRequests(e)}}><img src={img}/></button>
+                        <button className="refresh" onClick={(e) => {e.preventDefault(); seeRequests()}}><img src={img}/></button>
                         {pending?.map(r => {
                             return <div className="request-names" key={r.objectId}>{r.fromName} 
-                            <button onClick={(e) => acceptReq(e, r.fromName)}>Accept</button>
-                            <button>Reject</button>
+                            <button onClick={(e) => handleReq(e, r.fromName, "accept")}>Accept</button>
+                            <button onClick={(e) => handleReq(e, r.fromName, "deny")}>Deny</button>
                             </div>
                         })}
                     </div>
+                </div>
+                <div className="view-friends">
+                    My friends:
+                    {friends.from?.map(f => {
+                        return <div key={f.objectId}>{f.toName}</div>
+                    })}
+                    {friends.to?.map(f => {
+                        return <div key={f.objectId}>{f.fromName}</div>
+                    })}
                 </div>
             </div>            
         </div>

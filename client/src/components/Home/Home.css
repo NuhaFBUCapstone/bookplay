@@ -39,7 +39,7 @@
 .friends {
     padding: 12px;
     font-size: 18px;
-    display: block;
+    overflow: auto;
 }
 .friends input {
     border-radius: 5px;
@@ -52,7 +52,7 @@
 }
 .requests {
     float: right;
-    width: 50%;
+    width: 49%;
 }
 .user button {
     padding: 3px;
@@ -72,4 +72,15 @@
 
 .requests img {
     height: 15px;
+}
+
+.view-friends {
+    margin: 10px;
+    font-size: 19px;
+}
+.colored {
+    font-weight: bold;
+    color: green;
+    font-size: 20px;
+    padding-bottom: 10px;
 }

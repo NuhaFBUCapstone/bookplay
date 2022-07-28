@@ -17,7 +17,7 @@ router.get('/recent/:sessionToken', async (req, res) => {
         let bookQuery = new Parse.Query("Books")
         bookQuery.equalTo("userId", user)
         bookQuery.descending("createdAt")
-        let books = await bookQuery.find({useMasterKey : true})
+        let books = await bookQuery.find()
         res.status(200).send(books.slice(0, 5))
     } catch (err) {
         res.status(400).send({"error" : "couldn't get recent" + err })
@@ -56,11 +56,9 @@ router.post('/add/:id', async (req, res) => {
 router.post('/remove/:id', async (req, res) => {
     try {
         let query = new Parse.Query("_Session")
-            query.equalTo("sessionToken", req.body.sessionToken)
-            let objId = await query.first({useMasterKey : true})
-            //get user id using session
-            objId = objId.attributes.user.id
-
+        query.equalTo("sessionToken", req.body.sessionToken)
+        let objId = await query.first({useMasterKey : true})
+        objId = objId.attributes.user.id
         let book = new Parse.Query("Books")
         book.equalTo("bookId", req.params.id)
         book.equalTo("userId", objId)
@@ -70,7 +68,7 @@ router.post('/remove/:id', async (req, res) => {
             //if book exists:
             await response.destroy()
         }
-        res.status(200).send(book)
+        res.status(200).send("removed")
     } catch (err) {
         res.status(400).send({"error" : "remove failed. " + err })
     }
