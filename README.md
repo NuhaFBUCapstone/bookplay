@@ -5,18 +5,24 @@
 MVP:
  - search functionality with book detail page for each book
  - user can add/delete books from lists and add ratings and reviews
- - user can send and receive friend requests and view their friends' lists
+ - user can send and receive friend requests and view their current friends
  - users can get recommendations based off what their friends are reading
- - incorporates the Spotify API to create a playlist based off a search term.
+ - incorporates the Spotify API to create a playlist based off a **search term**.
  
 Stretch:
- - incorporates the Spotify API to create a playlist based off a book.
+ - incorporates the Spotify API to create a playlist based off a **book** and uses user's top songs.
  - users can directly recommend books to specific friends 
+ - automatic login session timeout
+ - content-based similarity recommendations for books
+ - allow users to view their friends' saved books 
 
 Technically Complex Components:
  - Recommendations
- 	- based off the books a user has read and compared to friends who have read those books to get recommendations
- - Public/Private Lists
+ 	- based off the books a user has read and compared to friends who have read those books to get recommendations (user-based, not content-based).
+ - Friends' Lists
+ 	- allow users to view their friends' saved books.
+ - Spotify playlist generation
+ 	- use multiple spotify API endpoints to create a song recommendation algorithm.
 
 **Components and Features**
 
