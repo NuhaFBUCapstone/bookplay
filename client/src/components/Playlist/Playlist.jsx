@@ -12,27 +12,26 @@ export default function Playlist() {
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
 
-    const [token, setToken] = useState("")
-    //check token based on localstorage so it stays after refresh
+    const [token, setToken] = useState(localStorage.getItem("token"))
     const [search, setSearch] = useState("")
     const [results, setResults] = useState([])
     useEffect(() => {
         const hash = window.location.hash 
-        let token = window.localStorage.getItem("token")
+        let token = localStorage.getItem("token")
 
         if (!token && hash) {
             token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token"))
             .split("=")[1]
             window.location.hash = ""
-            window.localStorage.setItem("token", token)
             setToken(token)
+            localStorage.setItem("token", token)
         }
       },[])    
 
 
       const logOut = () => {
         setToken("")
-        window.localStorage.removeItem("token")
+        localStorage.removeItem("token")
       }
 
       async function getRecs() {

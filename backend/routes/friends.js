@@ -5,10 +5,27 @@ var cors = require('cors');
 
 router.use(cors())
 
-router.get('/users/:name', async (req, res) => {
+/**
+ * find user based on username search and filter out people you're already friends with
+ */
+router.get('/users', async (req, res) => {
     try {
+        let sessionQuery = new Parse.Query("_Session").equalTo("sessionToken", req.query.sessionToken)
+        let userId = await sessionQuery.first({useMasterKey : true})
+        userId = userId.attributes.user.id
         let query = new Parse.Query("_User")
-        query.equalTo("username", req.params.name)
+        query.equalTo("username", req.query.name)
+        query.notEqualTo("objectId", userId)
+
+        //to exclude existing friends or already sent friend requests
+        let query1 = new Parse.Query("Friends").equalTo("fromName", req.query.name).equalTo("toUser", userId)
+        let query2 = new Parse.Query("Friends").equalTo("toName", req.query.name).equalTo("fromUser", userId)
+        const existingFriendsQuery = Parse.Query.or(query1, query2)
+        let existingFriends = await existingFriendsQuery.first()
+        if (existingFriends) {
+            //if there already is a friendship:
+            query.notContainedIn("objectId", [existingFriends.get("fromUser"), existingFriends.get("toUser")])
+        }
         const user = await query.first({useMasterKey : true})
         res.status(200).send(user)
     } catch (err) {
@@ -16,13 +33,34 @@ router.get('/users/:name', async (req, res) => {
     }
 })
 
+/**
+ * get list of all pending friend requests that have been sent to a user
+ */
+router.get('/seeReqs/:sessionToken', async(req, res) => {
+    try {
+        let query = new Parse.Query("_Session")
+        query.equalTo("sessionToken", req.params.sessionToken)
+        let user = await query.first({useMasterKey : true})
+        user = user.attributes.user.id
+        let friendQuery = new Parse.Query("Friends")
+        friendQuery.equalTo("status", "pending")
+        friendQuery.equalTo("toUser", user)
+        let requests = await friendQuery.find()
+        res.status(200).send(requests)
+    } catch (err) {
+        res.status(400).send({"error" : err })
+    }
+})
+
+/**
+ * creates a new friend request
+ */
 router.post('/send/:sessionToken', async (req, res) => {
     try {
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", req.params.sessionToken)
         const session = await query.first({useMasterKey : true})
-        let userQuery = new Parse.Query("_User")
-        userQuery.equalTo("objectId", session.attributes.user.id)
+        let userQuery = new Parse.Query("_User").equalTo("objectId", session.attributes.user.id)
         let user = await userQuery.first({useMasterKey : true})
         const Friend = Parse.Object.extend("Friends")
         let friend = new Friend()
@@ -34,26 +72,13 @@ router.post('/send/:sessionToken', async (req, res) => {
         await friend.save()
         res.status(200).send(friend)
     } catch (err) {
-        res.status(400).send({"error" : err })
+        res.status(400).send({"message" : "Couldn't send friend request" })
     }
 })
 
-router.get('/seeReqs/:sessionToken', async(req, res) => {
-    try {
-        let query = new Parse.Query("_Session")
-        query.equalTo("sessionToken", req.params.sessionToken)
-        let user = await query.first({useMasterKey : true})
-        user = user.attributes.user.id
-        let friendQuery = new Parse.Query("Friends")
-        friendQuery.equalTo("status", "pending")
-        friendQuery.equalTo("toUser", user)
-        let requests = await friendQuery.find({useMasterKey : true})
-        res.status(200).send(requests)
-    } catch (err) {
-        res.status(400).send({"error" : err })
-    }
-})
-
+/**
+ * accepts a friend request 
+ */
 router.post('/accept/:name', async(req, res) => {
     try {
         let query = new Parse.Query("_Session")
@@ -61,15 +86,56 @@ router.post('/accept/:name', async(req, res) => {
         let user = await query.first({useMasterKey : true})
         user = user.attributes.user.id
         let friendQuery = new Parse.Query("Friends")
-        console.log(user)
         friendQuery.equalTo("fromName", req.params.name)
         friendQuery.equalTo("toUser", user) 
         friendQuery.equalTo("status", "pending")
-        let request = await friendQuery.first({useMasterKey : true})
-        console.log(request)
+        let request = await friendQuery.first()
         request.set("status", "current")
         await request.save()
         res.status(200).send(request)
+    } catch (err) {
+        res.status(400).send({"error" : err })
+    }
+})
+
+/**
+ * denies a friend request
+ */
+router.post('/deny/:name', async(req, res) => {
+    try {
+        let query = new Parse.Query("_Session")
+        query.equalTo("sessionToken", req.body.sessionToken)
+        let user = await query.first({useMasterKey : true})
+        user = user.attributes.user.id
+        let friendQuery = new Parse.Query("Friends")
+        friendQuery.equalTo("fromName", req.params.name)
+        friendQuery.equalTo("toUser", user)
+        friendQuery.equalTo("status", "pending")
+        let friend = await friendQuery.first()
+        await friend.destroy()
+        res.status(200).send("request denied")
+    } catch (err) {
+        res.status(400).send({"error" : err })
+    }
+})
+/**
+ * get list of user's current friends
+ */
+router.get('/list/:sessionToken', async (req, res) => {
+    try {
+        let query = new Parse.Query("_Session")
+        query.equalTo("sessionToken", req.params.sessionToken)
+        let user = await query.first({useMasterKey : true})
+        user = user.attributes.user.id
+        let fromQuery = new Parse.Query("Friends")
+        let toQuery = new Parse.Query("Friends")
+        fromQuery.equalTo("fromUser", user)
+        toQuery.equalTo("toUser", user)
+        fromQuery.equalTo("status", "current")
+        toQuery.equalTo("status", "current")
+        let fromFriends = await fromQuery.find()
+        let toFriends = await toQuery.find()
+        res.status(200).send({"from": fromFriends, "to": toFriends})
     } catch (err) {
         res.status(400).send({"error" : err })
     }

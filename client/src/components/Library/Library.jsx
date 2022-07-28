@@ -86,10 +86,9 @@ export default function Library({sessionToken}) {
 
     return (
         <div className="library">
-            <div className={sessionToken===null ? "logged-out" : "hidden"}>
-                <div>Must be logged in to view this page.
-                <br></br>
-                <Link to="/">login here</Link></div>
+            <div className={sessionToken===null ? "logged-out-home" : "hidden"}>
+                <p>Must login to view library</p>
+                <Link to="/">Click to login</Link>
             </div> 
             <div className={sessionToken===null ? "hidden" : "flex"}>  
                 <div className="library-side">
