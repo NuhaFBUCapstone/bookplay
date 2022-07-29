@@ -24,7 +24,7 @@
 }
 .side {
     width: 28%;
-    left: 0px;
+    float: left;
     min-height:92vh;
     background-color: rgb(217, 214, 231);
 }

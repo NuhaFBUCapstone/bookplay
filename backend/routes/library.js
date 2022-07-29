@@ -56,7 +56,7 @@ router.get('/:sessionToken', async (req, res) => {
             let bookQuery = new Parse.Query("Books")
             bookQuery.equalTo("userId", user.id)
             bookQuery.equalTo("list", l)
-            const books = await bookQuery.find({useMasterKey : true})
+            const books = await bookQuery.find()
             temp[l] = books
         }
         res.send(temp)

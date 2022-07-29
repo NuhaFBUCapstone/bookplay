@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
     try {
         let reviewQuery = new Parse.Query("Reviews")
         reviewQuery.equalTo("bookId", req.params.id)
-        const review = await reviewQuery.find({useMasterKey : true})
+        const review = await reviewQuery.find()
         res.status(200).send(review)
     } catch (err) {
         res.status(400).send({"error": err })
