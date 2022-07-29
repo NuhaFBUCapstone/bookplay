@@ -1,3 +1,85 @@
 .hidden {
     display: none;
 }
+.gen-playlist {
+    text-align: center;
+    font-size: 29px;
+    color: rgb(59, 28, 122);
+}
+.bars {
+    margin: auto;
+    /* padding-top: 50px; */
+}
+.sp-log-in {
+    font-size: 20px;
+    text-decoration: none;
+    padding: 16px 0px;
+    background-color: rgb(217, 214, 231);
+    width: 28%;
+    text-align: center;
+    border-bottom: 1px solid rgb(59, 28, 122);
+}
+.sp-log-in a:hover {
+    color: rgb(140, 95, 189);
+}
+.sp-log-in a {
+    color: rgb(59, 28, 122);
+    text-decoration: none;
+}
+
+.sp-log-out {
+    font-size: 20px;
+    text-decoration: none;
+    padding: 15px 0px;
+    background-color: rgb(217, 214, 231);
+    width: 28%;
+    text-align: center;
+    border-bottom: 1px solid rgb(59, 28, 122);
+}
+.sp-log-out:hover {
+    color: rgb(140, 95, 189);
+}
+.playlist-cards {
+    width: 70%;
+    float: right;
+    padding: 1%;
+}
+.sp-bar {
+    border-radius: 5px;
+    margin-top: 45px;
+    padding: 6px;
+    width: 45%;
+    background-color: rgb(255, 240, 221);
+    border-width: 1px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+}
+.sp-btn {
+    background-color: rgb(255, 240, 221);
+    margin: 0px;
+    text-align: center;
+    width: 57px;
+    border-width: 1px;
+    padding: 6px;
+}
+.sp-clear {
+    background-color: rgb(255, 240, 221);
+    margin: 0px;
+    text-align: center;
+    width: 57px;
+    border-width: 1px;
+    padding: 6px;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.side {
+    display: block;
+    text-align: center;
+}
+.sp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+}

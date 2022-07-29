@@ -61,6 +61,7 @@ class Playlist {
 
     //from 5 songs, get recommendations
     static async getRec(seedSongs, token) {
+        //TODO: sometimes errors out here: "cannot read track"
         let str = seedSongs[0].track.id
         for (let i=1; i < seedSongs.length-1; i++) {
             str.concat(`,${seedSongs[i].track.id}`)

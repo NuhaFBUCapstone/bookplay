@@ -13,6 +13,7 @@ export default function Home({sessionToken}) {
     const [friends, setFriends] = useState({})
     const [recs, setRecs] = useState([])
     const [isSent, setIsSent] = useState(false)
+    const [loading, setLoading] = useState(false)
 
 
     const message = () => {
@@ -28,12 +29,14 @@ export default function Home({sessionToken}) {
 
     async function getUsers() {
         if (!searchTerm) return
+        setLoading(true)
         try { 
             const response = await axios.get(`http://localhost:3001/friends/users?name=${searchTerm}&sessionToken=${sessionToken}`)
             setSearchResults(response.data)
         } catch (err) {
             alert("Couldn't search for users")
         }
+        setLoading(false)
     }
 
     async function sendRequest(e) {
@@ -130,7 +133,7 @@ export default function Home({sessionToken}) {
                 </div></div>
                 <div className="friends">
                     <form className="search-friends">
-                        <label htmlFor="search">Find friends: </label>
+                        <label htmlFor="search">Find new friends: </label>
                         <input type="text" id="search" placeholder="search by username..." 
                             onChange={(e) => {setSearchTerm(e.target.value)}}>
                         </input>
@@ -138,7 +141,9 @@ export default function Home({sessionToken}) {
                         <input type="reset" value="clear" onClick={(e) => {setSearchTerm(""); setSearchResults({})}}></input>
                         <br/><br/>
                         <div className={isSent ? "colored" : "hidden"}> Sent request to {searchResults.username}!</div>
-                        <div className={Object.keys(searchResults).length===0 ? "no-res" : "hidden"}>No Results Found</div>
+                        <div className={Object.keys(searchResults).length===0 ? "no-res" : "hidden"}>
+                            {loading ? "Loading..." : "No Results Found"}
+                        </div>
                         <div className={Object.keys(searchResults).length!==0 ? "res" : "hidden"}>
                             {searchResults.username}, joined on {new Date(Date.parse(searchResults.createdAt)).toLocaleDateString()}
                             <button className={isSent ? "hidden" : "send-btn"} onClick={(e) => {

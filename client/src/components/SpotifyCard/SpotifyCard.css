@@ -1,0 +1,10 @@
+.album-cover {
+    height: 300px;
+}
+.sp-card {
+    font-size: 23px;
+    text-align: center;
+    background-color: rgb(255, 240, 221);
+    border-radius: 10px;
+    padding: 25px;
+}
