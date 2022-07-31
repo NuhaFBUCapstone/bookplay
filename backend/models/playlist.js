@@ -12,13 +12,18 @@ class Playlist {
      * @returns a list of the 5 top playlists using the provided search term
      */
     static async search(term, token) {
-        const url = `https://api.spotify.com/v1/search?q=${term}&type=playlist&limit=5`
+        let words = term.split(" ")
+        if (words.length>4) {
+            term = words.slice(0, 4).join(" ")
+        }
+        const url = `https://api.spotify.com/v1/search?q=${term}&type=playlist`
         const response = await axios.get(url, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
-          });     
-          return this.getSongs(response.data.playlists.items, token)
+          });
+          let songs = await this.getSongs(response.data.playlists.items, token)
+          return await this.getRec(songs, token)
     }
 
     /**
@@ -38,9 +43,9 @@ class Playlist {
         //choose 5 random indices: 
         let arr= []
         for (let i =0; i < 5; i++) {
-            let index = (Math.random() * songs.length-1).toFixed(0)
+            let index = (Math.random() * (songs.length-1)).toFixed(0)
             while (arr.includes(index)){
-                index = (Math.random() * songs.length-1).toFixed(0)
+                index = (Math.random() * (songs.length-1)).toFixed(0)
             }
             arr.push(index)
         }
@@ -48,7 +53,7 @@ class Playlist {
         arr.forEach(i => {
             seedSongs.push(songs[i])
         })
-        return this.getRec(seedSongs, token)
+        return seedSongs
     }
     static async getSongsHelper(url, token) {
         const response = await axios.get(url, {
@@ -61,14 +66,13 @@ class Playlist {
 
     //from 5 songs, get recommendations
     static async getRec(seedSongs, token) {
-        //TODO: sometimes errors out here: "cannot read track"
         let str = seedSongs[0].track.id
         for (let i=1; i < seedSongs.length-1; i++) {
             str.concat(`,${seedSongs[i].track.id}`)
 
         }
 
-        const response = await axios.get(`https://api.spotify.com/v1/recommendations?min_popularity=50&limit=8&seed_tracks=${str}`, {
+        const response = await axios.get(`https://api.spotify.com/v1/recommendations?min_popularity=50&limit=12&seed_tracks=${str}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }

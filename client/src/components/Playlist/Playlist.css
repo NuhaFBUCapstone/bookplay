@@ -35,6 +35,7 @@
     width: 28%;
     text-align: center;
     border-bottom: 1px solid rgb(59, 28, 122);
+    display: inline-block;
 }
 .sp-log-out:hover {
     color: rgb(140, 95, 189);
@@ -74,12 +75,38 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
-.side {
+.sp-side {
     display: block;
     text-align: center;
+    width: 28%;
+    float: left;
+    min-height:92vh;
+    background-color: rgb(217, 214, 231);
 }
 .sp-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 10px;
+    grid-gap: 20px;
+}
+@media screen and (max-width: 1420px){
+    .sp-grid{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.sp-show-title {
+    width: 70%;
+    display: inline-block;
+    font-size: 24px;
+    text-align: center;
+    padding-top: 13px;
+    font-family: Lucida;
+}
+.sp-book-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.sp-book-card img {
+    height: 180px;
 }
