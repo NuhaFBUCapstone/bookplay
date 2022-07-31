@@ -41,7 +41,7 @@ export default function App() {
                 <Route path="/search" element={<BookGrid/>}/>
                 <Route path="/book/:id" element={<BookDetail sessionToken={sessionToken} lists={lists}/>}/>
                 <Route path="/library" element={<Library lists={lists} setLists={setLists} sessionToken={sessionToken} />}/>
-                <Route path="/playlist" element={<Playlist/>}/>
+                <Route path="/playlist" element={<Playlist sessionToken={sessionToken}/>}/>
                 <Route path="*" element={<NotFound/>}/>
             </Routes>
             </BrowserRouter>

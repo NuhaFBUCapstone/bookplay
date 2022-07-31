@@ -9,7 +9,12 @@ router.use(cors())
  * find user based on username search and filter out people you're already friends with
  */
 router.get('/users', async (req, res) => {
+    //send notification option if friend is not there
     try {
+        let userExistsCheck = await new Parse.Query(Parse.User).equalTo("username", req.query.name).first()
+        if (!userExistsCheck) {
+            res.status(200).send({})
+        }
         let sessionQuery = new Parse.Query("_Session").equalTo("sessionToken", req.query.sessionToken)
         let userId = await sessionQuery.first({useMasterKey : true})
         userId = userId.attributes.user.id
