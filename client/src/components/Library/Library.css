@@ -12,7 +12,6 @@
     font-size: 35px;
     font-family: serif;
     margin: 20px;
-    /* background-color: rgb(217, 214, 231); */
 }
 
 .delete-btn {
@@ -23,7 +22,6 @@
     text-align: center;
     border: 1px;
     border-style: solid;
-    /* text-decoration-line: underline; */
 }
 .card:hover .delete-btn {
     visibility: visible;
@@ -69,6 +67,9 @@
 .card {
     margin: 10px;
 }
+.card img {
+    border: 1px solid;
+}
 .grid-side {
     width: 85%
 }
@@ -78,27 +79,12 @@
 }
 .library-side {
     width: 15%;
-    /* left: 0px; */
     height: 100vh;
     padding: 40px;
     margin-right: 20px;
     background-color: rgb(217, 214, 231);
 }
 
-/* button {
-    background-color: rgb(255, 240, 221);
-    border-radius: 5px;
-    padding: 5px;
-
-}
-.search-bar input{
-    border-radius: 7px;
-    margin: 20px;
-    padding: 8px;
-    width: 45%;
-    background-color: rgb(255, 240, 221);
-
-} */
 @media screen and (max-width: 1410px){
     .library-grid{
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
