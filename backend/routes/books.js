@@ -29,11 +29,19 @@ router.get('/recent/:sessionToken', async (req, res) => {
  */
 router.post('/add/:id', async (req, res) => {
     try {
-        //TODO: check if book is already in that list, no duplicates
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", req.body.sessionToken)
         let objId = await query.first({useMasterKey : true})
         objId = objId.attributes.user.id
+        let bookQuery = new Parse.Query("Books").equalTo("userId", objId)
+        bookQuery.equalTo("bookId", req.params.id)
+        bookQuery.equalTo("list", req.body.list)
+        let checkBook = await bookQuery.first()
+        if (checkBook) {
+            //if book already exists in that list
+            res.status.send(checkBook);
+            return;
+        }
         const Books = Parse.Object.extend("Books")
         let book = new Books()
         book.set("bookId", req.params.id)
@@ -42,6 +50,7 @@ router.post('/add/:id', async (req, res) => {
         book.set("title", req.body.title)
         book.set("image", req.body.image)
         book.set("author", req.body.author)
+        book.set("category", req.body.category)
         await book.save()
         res.status(200).send(book)
     } catch (err) {

@@ -95,8 +95,6 @@ export default function Home({sessionToken}) {
             getFriends()
             seeRequests()
         }}
-        // {if (sessionToken!==null) getFriends()}
-        // {if (sessionToken!==null) getRecs()}
       },[])
 
     return (

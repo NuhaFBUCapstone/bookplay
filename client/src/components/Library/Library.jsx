@@ -99,7 +99,7 @@ export default function Library({sessionToken}) {
                     {adding!=="" ? <form onSubmit={addList}>
                         <input className="list-add-type" type="text" onChange={(e) => setAdding(e.target.value)}/>
                         <input className="hidden" type="submit" value="Submit" />
-                    </form> : <p onDoubleClick={() => setAdding("show")} id="list-add">add list...</p>}
+                    </form> : <p onDoubleClick={() => setAdding("show")} id="list-add">+ add list...</p>}
                 </div>
                 <div className="grid-side">
                 <div className="grid-title">{list} <br/> 
