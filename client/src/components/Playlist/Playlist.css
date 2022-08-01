@@ -8,7 +8,6 @@
 }
 .bars {
     margin: auto;
-    /* padding-top: 50px; */
 }
 .sp-log-in {
     font-size: 20px;
@@ -54,7 +53,7 @@
     border-width: 1px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-
+    font-size: 12px;
 }
 .sp-btn {
     background-color: rgb(255, 240, 221);
@@ -109,4 +108,8 @@
 
 .sp-book-card img {
     height: 180px;
+}
+.set-instr {
+    line-height: 40px;
+    margin-top: 10px;
 }

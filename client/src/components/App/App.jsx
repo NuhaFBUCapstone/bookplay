@@ -16,6 +16,7 @@ export default function App() {
     const [trends, setTrends] = useState([])
     const [fetching, setFetching] = useState(false)
     const [lists, setLists] = useState([])
+    const [spotifyToken, setSpotifyToken] = useState(localStorage.getItem("token"))
  
     /**
      * get trending books for landing page
@@ -41,7 +42,7 @@ export default function App() {
                 <Route path="/search" element={<BookGrid/>}/>
                 <Route path="/book/:id" element={<BookDetail sessionToken={sessionToken} lists={lists}/>}/>
                 <Route path="/library" element={<Library lists={lists} setLists={setLists} sessionToken={sessionToken} />}/>
-                <Route path="/playlist" element={<Playlist sessionToken={sessionToken}/>}/>
+                <Route path="/playlist" element={<Playlist sessionToken={sessionToken} token={spotifyToken} setToken={setSpotifyToken}/>}/>
                 <Route path="*" element={<NotFound/>}/>
             </Routes>
             </BrowserRouter>

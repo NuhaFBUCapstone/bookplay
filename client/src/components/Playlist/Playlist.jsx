@@ -5,18 +5,20 @@ import axios from "axios"
 import SpotifyCard from "../SpotifyCard/SpotifyCard"
 import ReactLoading from "react-loading"
 
-export default function Playlist({sessionToken}) {
+export default function Playlist({sessionToken, token, setToken}) {
     const CLIENT_ID = "fa34a9f8d466460dbc82e1eddeb37765"
     const REDIRECT_URI = "http://localhost:3000/playlist"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
 
-    const [token, setToken] = useState(localStorage.getItem("token"))
+    // const [token, setToken] = useState(localStorage.getItem("token"))
     const [search, setSearch] = useState("")
     const [songs, setSongs] = useState([])
     const [loading, setLoading] = useState(false)
     const [bookResults, setBookResults] = useState([])
     const [selectedBook, setSelectedBook] = useState({})
+    const [instrumental, setInstrumental] = useState(0.5)
+    const [useInstrumental, setUseInstrumental] = useState(false)
 
     useEffect(() => {
         const hash = window.location.hash 
@@ -39,15 +41,14 @@ export default function Playlist({sessionToken}) {
         setBookResults([])
       }
 
-      async function getRecs(e) {
+      async function getRecs(e, b) {
         e.preventDefault();
         if (!search) return
         setSongs([])
         setLoading(true)
         try {
-            //selectedBook instead of search 
-            const response = await axios.post(`http://localhost:3001/playlist/search/${selectedBook.title}`, {
-                "token": token
+            const response = await axios.post(`http://localhost:3001/playlist/search/${token}`, {
+                "book": b, "instrumental": useInstrumental ? instrumental/100 : null
             })
             setSongs(response.data.tracks)
         } catch (err) {
@@ -58,7 +59,6 @@ export default function Playlist({sessionToken}) {
 
       async function getBooks(e) {
         e.preventDefault();
-        setSelectedBook({})
         if (!search) return
         try {
             const response = await axios.post(`http://localhost:3001/playlist/book/${search}`, {
@@ -80,13 +80,17 @@ export default function Playlist({sessionToken}) {
             <div className="sp-show-title">{songs.length===0 ? "" : `Songs related to ${selectedBook.title}:`}</div>
             <div className="sp-side">
                 <form className={token? "search": "hidden"}>
-                    <input className="sp-bar" type="text" onChange={e => setSearch(e.target.value)}/>
+                    <input className="sp-bar" type="text" onChange={e => setSearch(e.target.value)}  placeholder="search for books in your library"/>
                     <input className="sp-btn" onClick={(e) => getBooks(e)} type="submit" value="search"/>
-                    <input className="sp-clear" type="reset" value="clear" onClick={() => {setSearch(""); setSongs([]); setBookResults([])}}/>
+                    <input className="sp-clear" type="reset" value="clear" onClick={() => {setSearch(""); setSongs([]); setBookResults([]); setUseInstrumental(false)}}/>
+                    <div onClick={() => setUseInstrumental(!useInstrumental)} className="set-instr">
+                        {useInstrumental ? "Click to ignore instrumental filter" : "Click to set instrumental filter"}
+                    </div>
+                    <input className={useInstrumental ? "range" : "hidden"} type="range" onChange={e => setInstrumental(e.target.value)}/>
                 </form>
                 <div className="sp-book-grid">
                     {bookResults.map(b => {
-                        return <div onClick={(e) => {setSelectedBook(b); getRecs(e)}}
+                        return <div onClick={(e) => {setSelectedBook(b); getRecs(e, b)}}
                         className="sp-book-card" key={b.objectId}>
                             <img src={b.image}/>
                             <br/>
