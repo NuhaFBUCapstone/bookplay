@@ -6,8 +6,8 @@ const Parse = require('parse/node');
 
 router.use(cors())
 
-router.post('/search/:term', async (req, res) => {
-    const list = await Playlist.search(req.params.term, req.body.token)
+router.post('/search/:token', async (req, res) => {
+    const list = await Playlist.search(req.body.book, req.params.token, req.body.instrumental)
     res.status(201).send(list)
   })
 
