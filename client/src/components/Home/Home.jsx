@@ -4,6 +4,7 @@ import {Link} from "react-router-dom"
 import axios from "axios"
 import { useState, useEffect } from "react"
 import img from './refresh.png'
+import FriendBooks from "../FriendBooks/FriendBooks"
 
 export default function Home({sessionToken}) {
     const [recents, setRecents] = useState([])
@@ -14,7 +15,9 @@ export default function Home({sessionToken}) {
     const [recs, setRecs] = useState([])
     const [isSent, setIsSent] = useState(false)
     const [loading, setLoading] = useState(false)
-
+    const [friendBooks, setFriendBooks] = useState([])
+    const [selectedFriend, setSelectedFriend] = useState("")
+    const [friendLoading, setFriendLoading] = useState(false)
 
     const message = () => {
         setIsSent(true)
@@ -78,6 +81,23 @@ export default function Home({sessionToken}) {
             alert("Couldn't load friends.")
         }
     }
+    async function getFriendBooks(name) {
+        if (selectedFriend===name) {
+            //clicking on the same person again closes their library
+            setFriendBooks([])
+            setSelectedFriend("")
+            return;
+        }
+        setFriendLoading(true)
+        try {
+            const response = await axios.get(`http://localhost:3001/friends/books/${name}`)
+            setFriendBooks(response.data)
+            setSelectedFriend(name)
+        } catch {
+            alert(`Couldn't load ${name}'s books.`)
+        }
+        setFriendLoading(false)
+    }
 
     async function getRecent() {
         try {
@@ -115,20 +135,7 @@ export default function Home({sessionToken}) {
                         </div>
                 })}
                 </div></div><br/>
-                <div className="recents-title">
-                <h2>Recommendations</h2>
-                <p className={recs.length!==0? "show" : "hidden"}>People who read books you liked also read: </p>
-                <div className="recents-outer">
-                    <div className={recs.length!==0 ? "hidden" : "show"}>
-                        You haven't interacted with enough books to generate recommendations.
-                    </div>
-                    {recs?.map(b => {
-                        return <div className="recents" key={b.objectId}>
-                            <Link to={`/book/${b.bookId}`}><img className="recents-image" src={b.image}/><br/></Link>
-                            {b.title}<br/>
-                        </div>
-                    })}
-                </div></div>
+
                 <div className="friends">
                     <form className="search-friends">
                         <label htmlFor="search">Find new friends: </label>
@@ -163,15 +170,32 @@ export default function Home({sessionToken}) {
                         })}
                     </div>
                 </div>
-                <div className="view-friends">
-                    My friends:
-                    {friends.from?.map(f => {
-                        return <div key={f.objectId}>{f.toName}</div>
-                    })}
-                    {friends.to?.map(f => {
-                        return <div key={f.objectId}>{f.fromName}</div>
-                    })}
+                <div className="friends-library-list">
+                    <div className="view-friends">
+                        <h1>My friends:</h1>
+                        {friends.from?.map(f => {
+                            return <div onClick={() => getFriendBooks(f.toName)} key={f.objectId}>{f.toName}</div>
+                        })}
+                        {friends.to?.map(f => {
+                            return <div onClick={() => getFriendBooks(f.fromName)} key={f.objectId}>{f.fromName}</div>
+                        })}
+                    </div>
+                    <FriendBooks friendBooks={friendBooks} selectedFriend={selectedFriend} friendLoading={friendLoading}/>
                 </div>
+                <div className="recents-title">
+                <h2>Recommendations</h2>
+                <p className={recs.length!==0? "show" : "hidden"}>People who read books you liked also read: </p>
+                <div className="recents-outer">
+                    <div className={recs.length!==0 ? "hidden" : "show"}>
+                        You haven't interacted with enough books to generate recommendations.
+                    </div>
+                    {recs?.map(b => {
+                        return <div className="recents" key={b.objectId}>
+                            <Link to={`/book/${b.bookId}`}><img className="recents-image" src={b.image}/><br/></Link>
+                            {b.title}<br/>
+                        </div>
+                    })}
+                </div></div>
             </div>            
         </div>
     )
