@@ -145,6 +145,23 @@ router.get('/list/:sessionToken', async (req, res) => {
         res.status(400).send({"error" : err })
     }
 })
+/**
+ * get friend's books
+ */
+router.get('/books/:name', async (req, res) => {
+    try {
+        const query = new Parse.Query("_User").equalTo("username", req.params.name)
+        const user = await query.first({useMasterKey : true})
+        const userId = user.id
+        let bookQuery = new Parse.Query("Books")
+        bookQuery.equalTo("userId", userId)
+        bookQuery.equalTo("list", "Reading")        
+        const books = await bookQuery.find()
+        res.send(books)
+    } catch (err) {
+        res.status(400).send({"error" : err })
+    }
+})
 
 
 module.exports = router

@@ -1,3 +1,6 @@
+.home {
+    margin-bottom: 150px;
+}
 .recents-title {
     background-color: rgb(225, 207, 190);
     padding: 10px;
@@ -6,11 +9,14 @@
     margin: 15px;
     display: flex;
     flex-wrap: wrap;
-    gap: 15px
+    gap: 28px
 }
 .recents-image {
     height: 200px;
     border: 0.5px solid;
+}
+.recents {
+    inline-size: 140px;
 }
 .logged-out-home {
     background-color: rgb(225, 207, 190); 
@@ -75,12 +81,32 @@
 }
 
 .view-friends {
-    margin: 10px;
-    font-size: 19px;
+    font-size: 20px;
+    background-color: rgb(225, 207, 190); 
+    width: 28%;
+    padding-left: 1.5%;
+    padding-bottom: 40px;
+    float: left;
+    margin-top: 20px;
+    margin-left: 14px;
+    box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
+-webkit-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
+-moz-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
 }
+.view-friends h1 {
+    font-size: 25px;
+    font-family: Lucida;
+}
+
 .colored {
     font-weight: bold;
     color: green;
     font-size: 20px;
     padding-bottom: 10px;
+}
+.friends-library-list {
+    overflow: auto;
+    background-color: rgb(217, 214, 231);
+    padding-bottom: 50px;
+    margin-bottom: 80px;
 }
