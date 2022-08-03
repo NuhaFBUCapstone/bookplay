@@ -11,7 +11,6 @@ export default function Playlist({sessionToken, token, setToken}) {
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
 
-    // const [token, setToken] = useState(localStorage.getItem("token"))
     const [search, setSearch] = useState("")
     const [songs, setSongs] = useState([])
     const [loading, setLoading] = useState(false)

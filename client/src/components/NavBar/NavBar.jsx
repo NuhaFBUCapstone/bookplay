@@ -5,19 +5,23 @@ import axios from "axios"
 import logo from './logo.png'
 import { useState } from "react"
 
-export default function NavBar({setSessionToken, sessionToken}) {
+export default function NavBar(props) {
   const [loggedOut, setLoggedOut] = useState(false)
 
   async function logout(event) {
-    if (!sessionToken) return
+    if (!props.sessionToken) return
     event.preventDefault()
-    const res = await axios.post(`http://localhost:3001/logout`, {
-      "sessionToken" : sessionToken
+    await axios.post(`http://localhost:3001/logout`, {
+      "sessionToken" : props.sessionToken
       })
     setLoggedOut(true)
     setTimeout(() => {setLoggedOut(false)}, 700)
-    setSessionToken(null)
+    props.setSessionToken(null)
     localStorage.removeItem("sessionToken")
+    if (props.spotifyToken) {
+      props.setSpotifyToken("")
+      localStorage.removeItem("token")
+    }
   }
     return (
     <nav className="navbar">
