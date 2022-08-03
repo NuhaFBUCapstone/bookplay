@@ -72,10 +72,12 @@ export default function LoginForm(props) {
         <br></br>
         <button type="submit">{log ? "Login" : "Register"}</button>
         </form>
-        <div>{log ? "Don't have an account?" : "Already have an account?"} <button className="link" 
-        onClick={() => {
-            setLog(!log)
-        }}>Click here</button></div>
+        <div className="bottom-link">{log ? "Don't have an account? " : "Already have an account? "} 
+            <button className="link" 
+            onClick={() => {
+                setLog(!log)
+            }}>Click here</button>
+        </div>
     </div>
     )
 }
