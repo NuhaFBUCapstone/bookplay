@@ -34,7 +34,7 @@ export default function App() {
     return (
         <div className="app">
             <BrowserRouter>
-            <NavBar sessionToken={sessionToken} setSessionToken={setSessionToken}/>
+            <NavBar sessionToken={sessionToken} setSessionToken={setSessionToken} spotifyToken={spotifyToken} setSpotifyToken={setSpotifyToken}/>
             <Routes>
                 <Route path="/" element={<LoggedOut lists={lists} setLists={setLists} trends={trends} fetching={fetching} 
                 sessionToken={sessionToken} setSessionToken={setSessionToken}/>}/>

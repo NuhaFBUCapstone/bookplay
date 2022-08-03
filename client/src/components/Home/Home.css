@@ -90,8 +90,9 @@
     margin-top: 20px;
     margin-left: 14px;
     box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
--webkit-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
--moz-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
+    -webkit-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
+    -moz-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
+    border-radius: 20px;
 }
 .view-friends h1 {
     font-size: 25px;
