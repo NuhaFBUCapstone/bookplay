@@ -17,12 +17,6 @@
     font-size: 14px;
 }
 
-/* .box {
-    background-color: rgb(255, 255, 255);    
-    width: 500px;
-    margin: auto;
-    box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
--webkit-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
--moz-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
-padding: 20px;
-} */
+.bottom-link {
+    padding: 20px 0px 8px 0px;
+}

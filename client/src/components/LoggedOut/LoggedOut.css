@@ -18,16 +18,28 @@ h3 {
     max-width: 380px;
 }
 .text-header {
-    margin: 18px;
+    padding: 18px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 24px;
+    font-size: 29px;
+    margin-top: 350px;
+    background-color: rgb(225, 207, 190);  
+    width: 100%;  
+    margin-bottom: 0;
+
+}
+.about-header {
+    padding: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 29px;
+    margin: 0;
+    background-color: rgb(225, 207, 190); 
+    margin-top: 350px; 
 }
 .header img {
     width: 100%;
     height: auto;
 }
 .about-text {
-    /* inline-size: 57%;  */
     font-size: 20px;
     line-height: 45px;
     margin-left: 30px;
@@ -49,6 +61,7 @@ h3 {
     flex-direction:row;
     background-color: rgb(225, 207, 190);
     padding: 50px;
+    padding-top: 8px;
 }
 .trend-box .carousel {
     flex: 1;
@@ -68,26 +81,17 @@ h3 {
     height: 80px;
     text-align: center;
 }
-
-.box1 {
-    background-color: rgb(225, 207, 190);    
-    text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    line-height: 35px;
-    padding: 35px;
-    /* padding-top: 10px; */
-}
-
-
 .box {
     background-color: white;
     width: 30%;
     min-width: 139px;
     margin: auto;
     box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
--webkit-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
--moz-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
-padding: 20px;
+    -webkit-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
+    -moz-box-shadow: 10px 10px 51px -14px rgba(0,0,0,0.7);
+    padding: 20px;
+    text-align: center;
+    margin-top: 30vh;
 }
 
 .carousel {
@@ -105,3 +109,7 @@ padding: 20px;
         display: block;
     }
   }
+
+.parallax {
+    height: 200vh;
+}
