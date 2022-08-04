@@ -50,7 +50,8 @@ router.post('/add/:id', async (req, res) => {
         book.set("title", req.body.title)
         book.set("image", req.body.image)
         book.set("author", req.body.author)
-        book.set("category", req.body.category)
+        const genre = parseGenre(req.body.category)
+        book.set("category", genre)
         await book.save()
         res.status(200).send(book)
     } catch (err) {
@@ -58,6 +59,14 @@ router.post('/add/:id', async (req, res) => {
     }
 
 })
+function parseGenre(category) {
+    const genreArray = category.split(" / ")
+    let genre = ""
+    genreArray[genreArray.length-1]==="General" ? 
+        (genre = genreArray[genreArray.length-2]) : (genre = genreArray[genreArray.length-1])
+    genre = genre.replace("& ", "")
+}
+
 
 /**
  * remove a book from a list

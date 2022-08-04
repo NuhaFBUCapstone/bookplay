@@ -18,35 +18,34 @@ class Playlist {
         words.length > 4 ? (title = words.slice(0, 4).join(" ")) : (title = book.title)
         //use first 4 words of the title
 
-        const url = `https://api.spotify.com/v1/search?q=${title}&type=playlist&limit=3`
-        const titleResponse = await axios.get(url, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
+        let [titleResponse, genreResponse] = 
+                            await Promise.all([this.getPlaylists(title, token),
+                                                            this.getPlaylists(book.category, token)])
+        let songs = 
+                await Promise.all([this.getSongs(titleResponse, token),
+                                        this.getSongs(genreResponse, token)])
 
-        const genreArray = book.category.split(" / ")
-        let genre = ""
-        genreArray[genreArray.length-1]==="General" ? (genre = genreArray[genreArray.length-2]) : (genre = genreArray[genreArray.length-1])
-        genre = genre.replace("& ", "")
-        //get significant phrase from genre
-
-        const genreUrl = `https://api.spotify.com/v1/search?q=${genre}&type=playlist&limit=3`
-        const genreResponse = await axios.get(genreUrl, {
-            headers: {
-            'Authorization': `Bearer ${token}`
-            }
-        });
-        let titleSongs = await this.getSongs(titleResponse.data.playlists.items, token)
-        let genreSongs = await this.getSongs(genreResponse.data.playlists.items, token)
-        let songs = titleSongs.concat(genreSongs)
-        return await this.getRec(songs, token, instrumental)
+        return await this.getRec(songs.flat(), token, instrumental)
     }
 
     /**
-     * 
-     * @param playlistList is a list of 3 playlists from the function above
-     * @param token is access token for Spotify API 
+     * Helper function to run playlist searches
+     * @param {string} term is the search term for the playlist search
+     * @param {string} token is access token for Spotify API 
+     * @returns playlist information based on search term
+     */
+    static async getPlaylists(term, token) {
+        const response = await axios.get(`https://api.spotify.com/v1/search?q=${term}&type=playlist&limit=3`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data.playlists.items
+    }
+
+    /**
+     * @param {array} playlistList is a list of playlists
+     * @param {string} token is access token for Spotify API 
      * @returns 3 random songs from the given playlists
      */
     static async getSongs(playlistList, token) {
@@ -102,6 +101,7 @@ class Playlist {
             url = `https://api.spotify.com/v1/recommendations?min_popularity=30&limit=12&seed_tracks=${str}&target_instrumentalness=${instrumental}`
         }
 
+        console.log(url)
         const response = await axios.get(url, {
             headers: {
               'Authorization': `Bearer ${token}`
