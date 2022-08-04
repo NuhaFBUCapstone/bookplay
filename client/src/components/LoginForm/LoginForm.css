@@ -23,6 +23,8 @@
 .welcome {
     height: 128px;
     margin-top: 110px;
-    font-size: 25px;
+    font-size: 34px;
     font-family: serif;
+    font-weight: 600;
+    color: rgb(50, 24, 91);
 }
