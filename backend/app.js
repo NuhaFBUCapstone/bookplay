@@ -26,7 +26,7 @@ const MASTERKEY = "6wssvUvxnn7VBB0mUhboQM7F7TaaBKk8sU1Ic6vE"
 const APPKEY = "3PRkrcUCakVV2GzHDYS5svrNa7CK5TBD7WfiNogY"
 const JSKEY = "QThaAFJyq0JMnn4yytCSPJUt9kdFqffclXAZeYBA"
 Parse.initialize(APPKEY, JSKEY, MASTERKEY);
-Parse.serverURL = 'http://parseapi.back4app.com/'
+Parse.serverURL = 'https://parseapi.back4app.com/'
 
 
 app.post('/logout', async (req, res) => {

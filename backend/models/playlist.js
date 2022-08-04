@@ -100,8 +100,6 @@ class Playlist {
         else {
             url = `https://api.spotify.com/v1/recommendations?min_popularity=30&limit=12&seed_tracks=${str}&target_instrumentalness=${instrumental}`
         }
-
-        console.log(url)
         const response = await axios.get(url, {
             headers: {
               'Authorization': `Bearer ${token}`

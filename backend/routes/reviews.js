@@ -29,11 +29,31 @@ router.post('/add/:id', async (req, res) => {
         review.set("review", req.body.review)
         review.set("username", username)
         await review.save()
+        if (req.body.rating!==0) updateAvgRating(req.params.id, req.body.rating)
         res.status(200).send(review)
     } catch (err) {
         res.status(400).send({"error": err })
     }
 })
+
+async function updateAvgRating(bookId, rating) {
+    const reviewQuery = new Parse.Query("Books").equalTo("bookId", bookId)
+    let reviews = await reviewQuery.find()
+    if (reviews[0].attributes.avgRating===undefined || reviews[0].attributes.ratingsCount===undefined) {
+        await Promise.all(reviews.map(async (r) => {
+            r.set("avgRating", rating)
+            r.set("ratingsCount", 1)
+            r.save()
+        }))
+    }
+    await Promise.all(reviews.map(async (r) => {
+        let avg = (r.attributes.avgRating * r.attributes.ratingsCount + rating)/(r.attributes.ratingsCount+1)
+        console.log(avg)
+        r.set("avgRating", parseFloat(avg.toFixed(2)))
+        r.increment("ratingsCount")
+        r.save()
+    }))
+}
 
 router.get('/:id', async (req, res) => {
     try {

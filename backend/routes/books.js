@@ -52,6 +52,8 @@ router.post('/add/:id', async (req, res) => {
         book.set("author", req.body.author)
         const genre = parseGenre(req.body.category)
         book.set("category", genre)
+        book.set("avgRating", req.body.avgRating)
+        book.set("ratingsCount", req.body.ratingsCount)
         await book.save()
         res.status(200).send(book)
     } catch (err) {
