@@ -8,7 +8,7 @@ export default function SpotifyCard({song}) {
             <img className="album-cover" src={song.album.images[0].url}/>
             <br/>
     <iframe className={song.preview_url ? "show" : "hidden"}
-        height="85"
+        width="100%"
         src={song.preview_url}>
     </iframe>
         </div>
