@@ -61,7 +61,8 @@ export default function BookDetail(props) {
             const response = await axios.post(`http://localhost:3001/books/add/${book.id}`, {
                 "sessionToken": props.sessionToken, "list": list, "title": book.volumeInfo.title,
                 "image": getImage(), "author": book.volumeInfo?.authors ? book.volumeInfo.authors[0] : "[unknown]",
-                "category": book.volumeInfo.categories ? book.volumeInfo.categories[0] : "Fiction"
+                "category": book.volumeInfo.categories ? book.volumeInfo.categories[0] : "Fiction",
+                "avgRating": book.volumeInfo.averageRating, "ratingsCount": book.volumeInfo.ratingsCount
             })
         } catch (err) {
             alert("Couldn't add book.")

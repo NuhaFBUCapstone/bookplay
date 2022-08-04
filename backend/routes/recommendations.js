@@ -8,8 +8,12 @@ router.use(cors())
  * get recommended books based on other readers who have the same book saved
  */
 router.get('/:sessionToken', async (req, res) => {
-    const possibleRecs = await getBooks(req.params.sessionToken)
-    //mapping for popularity
+    let possibleRecs = await getBooks(req.params.sessionToken)
+    if (possibleRecs.length===0) {
+        //if no matches to other users' libraries can be found
+        possibleRecs = await getBooksByRating()
+    }
+    //mapping for popularity within user base
     let popularity = {}
     possibleRecs.forEach(r => {
         if (popularity[r.attributes.bookId]) popularity[r.attributes.bookId][1] += 1
@@ -20,7 +24,7 @@ router.get('/:sessionToken', async (req, res) => {
     let finalRecs = []
     Object.keys(popularity).sort((a, b) => popularity[b][1] - popularity[a][1]).forEach((key, idx) =>
     {
-       if(idx < 4){
+       if(idx < 6){
           finalRecs[idx] = popularity[key][0];
        }
     })
@@ -38,9 +42,9 @@ router.get('/:sessionToken', async (req, res) => {
     reviewQuery.greaterThan("rating", 3)
     reviewQuery.descending("createdAt")
     let bookSeed = await reviewQuery.first()
-    //if user has not left any positive reviews, return empty array
+    //if user has not left any positive reviews, return books based on global ratings
     if (!bookSeed) {
-        return []
+        return await getBooksByRating()
     }
     let bookQuery = new Parse.Query("Books")
     bookQuery.equalTo("bookId", bookSeed.attributes.bookId)
@@ -57,6 +61,12 @@ router.get('/:sessionToken', async (req, res) => {
     userQuery.doesNotMatchKeyInQuery("bookId", "bookId", new Parse.Query("Books").equalTo("userId", userId))
     //exclude all of the books the user has already saved
     return await userQuery.find()
+  }
+
+  async function getBooksByRating() {
+    const bookQuery = new Parse.Query("Books").greaterThan("avgRating", 3)
+    let books = await bookQuery.find()
+    return books
   }
 
 module.exports = router
