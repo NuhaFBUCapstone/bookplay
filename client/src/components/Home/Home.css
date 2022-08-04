@@ -98,7 +98,14 @@
     font-size: 25px;
     font-family: Lucida;
 }
-
+.friend-name-list:hover {
+    color: rgb(168, 103, 168);
+}
+.friend-name-list {
+    padding: 5px;
+    font-size: 23px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
 .colored {
     font-weight: bold;
     color: green;

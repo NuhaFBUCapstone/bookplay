@@ -1,88 +1,110 @@
 h3 {
-    background-color: rgb(225, 207, 190);    
+    background-color: rgba(225, 207, 190, 0.675);
     font-size: 30px;
     padding: 60px;
     text-align: center;
+    margin: 0;
 }
 
 .about-us {
-    display: inline-block;
-    background-color: rgb(225, 207, 190);
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    background-color: rgba(225, 207, 190, 0.675);
+    padding-bottom: 30px;
 }
 .about-us img {
-    float: right;
-    width: 20%;
-    height: auto;
-    padding: 30px;
-    max-width: 380px;
+    max-width: 70px;
+    padding-top: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.about-text {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+    margin-left: 30px;
+    text-align: center;
+    background-color: rgb(254, 239, 225);
+    border-radius: 10px;
+    padding: 25px;
+    line-height: 30px;
+}
+.about-header {
+    padding: 18px;
+    font-family: serif;
+    font-size: 32px;
+    margin: 0;
+    background-color: rgba(225, 207, 190, 0.75);
+    margin-top: 390px; 
+}
+.stats-text {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+    margin-left: 30px;
+    text-align: center;
+    background-color: rgb(254, 239, 225);
+    border-radius: 10px;
+    padding: 25px;
+}
+.stats-text img {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 45px;
 }
 .text-header {
     padding: 18px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 29px;
-    margin-top: 350px;
-    background-color: rgb(225, 207, 190);  
+    font-family: serif;
+    font-size: 32px;
+    margin-top: 380px;
+    background-color: rgba(225, 207, 190, 0.675);
     width: 100%;  
     margin-bottom: 0;
 
 }
-.about-header {
-    padding: 18px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 29px;
-    margin: 0;
-    background-color: rgb(225, 207, 190); 
-    margin-top: 350px; 
-}
+
 .header img {
     width: 100%;
     height: auto;
 }
-.about-text {
-    font-size: 20px;
-    line-height: 45px;
-    margin-left: 30px;
-    width: 70%;
-    float: left;
-}
+
 
 .header {
     padding-bottom: 0px;
-    background-color: rgb(225, 207, 190);    
+    background-color: rgba(225, 207, 190, 0.675);
     font-size: 40px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
 }
 
 .trend-box {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction:row;
-    background-color: rgb(225, 207, 190);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+    background-color: rgba(225, 207, 190, 0.675);
     padding: 50px;
     padding-top: 8px;
-}
-.trend-box .carousel {
-    flex: 1;
 }
 
 .trends {
     border: 0.5px solid;
     display: block;
     margin: auto;
-    height: 200px;
+    height: 100px;
     width: auto;
 }
 .text {
-    font-size: 16px;
+    font-size: 13px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 400;
-    height: 80px;
+    max-width: 160px;
     text-align: center;
+    margin: auto;
+    padding-bottom: 10px;
+    padding-top: 10px;
+
 }
 .box {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.8);
     width: 30%;
     min-width: 139px;
     margin: auto;
@@ -95,9 +117,9 @@ h3 {
 }
 
 .carousel {
+    border-radius: 8px;
     width: 100%;
-    padding: 17px;
-    background-color: white;
+    background-color: rgb(254, 239, 225);
     margin-left: 20px;
     box-shadow: 10px 10px 38px -19px rgba(0,0,0,0.59);
     -webkit-box-shadow: 10px 10px 38px -19px rgba(0,0,0,0.59);
@@ -112,4 +134,7 @@ h3 {
 
 .parallax {
     height: 200vh;
+}
+.stats {
+    background-color: rgba(225, 207, 190, 0.675);
 }

@@ -2,16 +2,23 @@ import * as React from "react"
 import "./LoginForm.css"
 import { createRef } from "react"
 import axios from "axios"
-import {useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 
 export default function LoginForm(props) {
     const [log, setLog] = useState(true)
-    const navigate = useNavigate();
     const username = createRef();
     const password = createRef();
     const passwordConf = createRef();
+    const [name, setName] = useState("")
+
+    async function getName() {
+        const response = await axios.get(`http://localhost:3001/name/${props.sessionToken}`)
+        setName(response.data)
+    }
+    useEffect(() => {
+        if (props.sessionToken!==null) getName()
+      },[])
 
         const login = async () => {
             try {
@@ -21,7 +28,7 @@ export default function LoginForm(props) {
                     })
                 props.setSessionToken(res.data.sessionToken)
                 localStorage.setItem('sessionToken', res.data.sessionToken);
-                navigate("/home")
+                setName(username.current.value)
             } catch (err) {
                 alert("Wrong username or password.")
             }
@@ -39,7 +46,7 @@ export default function LoginForm(props) {
                     })
                 props.setSessionToken(res.data.sessionToken)
                 localStorage.setItem('sessionToken', res.data.sessionToken);
-                navigate("/home")
+                setName(username.current.value)
             } catch (err) {
                 alert(err.response.data)
             }
@@ -47,6 +54,8 @@ export default function LoginForm(props) {
 
 
     return (
+        <div>
+        {props.sessionToken!==null ? <div className="welcome">{`Welcome, ${name}`}!</div> :
         <div>
         <form onSubmit={(e) => {
             e.preventDefault();
@@ -78,6 +87,7 @@ export default function LoginForm(props) {
                 setLog(!log)
             }}>Click here</button>
         </div>
+    </div>}
     </div>
     )
 }
