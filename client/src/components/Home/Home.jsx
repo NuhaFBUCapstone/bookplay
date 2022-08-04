@@ -49,7 +49,7 @@ export default function Home({sessionToken}) {
                 "friend": searchResults
             })
         } catch (err) {
-            alert(err.response.data.message)
+            alert(`${err.response.status} Error: ${err.response.data.message}`)
         }
     }
     async function seeRequests() {
