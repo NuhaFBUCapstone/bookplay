@@ -60,11 +60,12 @@ router.post('/add/:id', async (req, res) => {
 
 })
 function parseGenre(category) {
+    if (category==="Fiction") return category
     const genreArray = category.split(" / ")
     let genre = ""
     genreArray[genreArray.length-1]==="General" ? 
         (genre = genreArray[genreArray.length-2]) : (genre = genreArray[genreArray.length-1])
-    genre = genre.replace("& ", "")
+    return genre.replace("& ", "")
 }
 
 

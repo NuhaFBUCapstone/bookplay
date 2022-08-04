@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import SpotifyCard from "../SpotifyCard/SpotifyCard"
 import ReactLoading from "react-loading"
+import {Link} from "react-router-dom"
+
 
 export default function Playlist({sessionToken, token, setToken}) {
     const CLIENT_ID = "fa34a9f8d466460dbc82e1eddeb37765"
@@ -40,14 +42,14 @@ export default function Playlist({sessionToken, token, setToken}) {
         setBookResults([])
       }
 
-      async function getRecs(e, b) {
-        e.preventDefault();
+      async function getRecs(event, book) {
+        event.preventDefault();
         if (!search) return
         setSongs([])
         setLoading(true)
         try {
             const response = await axios.post(`http://localhost:3001/playlist/search/${token}`, {
-                "book": b, "instrumental": useInstrumental ? instrumental/100 : null
+                "book": book, "instrumental": useInstrumental ? instrumental/100 : null
             })
             setSongs(response.data.tracks)
         } catch (err) {
@@ -70,8 +72,13 @@ export default function Playlist({sessionToken, token, setToken}) {
       }
 
       return (
+        <div className="playlist-outer">
+            {sessionToken===null ?  
+            <div className="logged-out-home">
+                <p>Must login to generate playlists</p>
+                <Link to="/">Click to login</Link></div> :
         <div className="playlist">
-            <div className={token? "hidden" : "sp-log-in"}>
+                <div className={token? "hidden" : "sp-log-in"}>
                 <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
                 Click here to log in to Spotify</a>
             </div>
@@ -106,6 +113,7 @@ export default function Playlist({sessionToken, token, setToken}) {
                     return <SpotifyCard song={r} key={idx}/>
                 })}</div>
             </div>
-        </div>
+        </div>}
+    </div>
     )
 }

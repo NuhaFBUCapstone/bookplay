@@ -174,10 +174,10 @@ export default function Home({sessionToken}) {
                     <div className="view-friends">
                         <h1>My friends:</h1>
                         {friends.from?.map(f => {
-                            return <div onClick={() => getFriendBooks(f.toName)} key={f.objectId}>{f.toName}</div>
+                            return <div className="friend-name-list" onClick={() => getFriendBooks(f.toName)} key={f.objectId}>{f.toName}</div>
                         })}
                         {friends.to?.map(f => {
-                            return <div onClick={() => getFriendBooks(f.fromName)} key={f.objectId}>{f.fromName}</div>
+                            return <div className="friend-name-list" onClick={() => getFriendBooks(f.fromName)} key={f.objectId}>{f.fromName}</div>
                         })}
                     </div>
                     <FriendBooks friendBooks={friendBooks} selectedFriend={selectedFriend} friendLoading={friendLoading}/>

@@ -7,7 +7,8 @@ const bookRoute = require("./routes/books")
 const libraryRoute = require("./routes/library")
 const reviewRoute = require("./routes/reviews")
 const recRoute = require("./routes/recommendations")
-const friendRoute = require("./routes/friends")
+const friendRoute = require("./routes/friends");
+const { User, Session } = require('parse/node');
 
 const app = express()
 
@@ -38,8 +39,7 @@ app.post('/logout', async (req, res) => {
       .destroy({useMasterKey: true})
       .then (res.status(200).send("logged out"))
       .catch(function (err) {
-        res.status(400)
-        res.send({ Message: err.message, typeStatus: "danger"});
+        res.status(400).send({ Message: err.message, typeStatus: "danger"});
       })
     } else {
       res.send();
@@ -68,6 +68,20 @@ app.post('/register', async(req, res) => {
       user.set("lists", ["Read", "Reading", "Want to Read"])
       await user.save(null, { useMasterKey: true })
       res.status(201).send({"user": user, "sessionToken": await user.getSessionToken()})
+})
+
+app.get('/stats', async (req, res) => {
+  let books = await new Parse.Query("Books").find()
+  let users = await new Parse.Query(User).find({ useMasterKey: true })
+  res.status(200).send({"books": books.length, "users": users.length})})
+
+app.get('/name/:sessionToken', async (req, res) => {
+  const user = new Parse.Query(Session).equalTo("sessionToken", req.params.sessionToken)
+  const session = await user.first({ useMasterKey: true })
+  let name = session.get("user")
+  await name.fetch()
+  name = name.get("username")
+  res.status(200).send(name)
 })
 
 module.exports = app
