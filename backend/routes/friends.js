@@ -15,13 +15,21 @@ router.get('/users', async (req, res) => {
         if (!userExistsCheck) {
             res.status(200).send({})
         }
+    } catch {
+        res.status(400).send({"message": "Parse Query failed"})
+    }
+    try {
         let sessionQuery = new Parse.Query("_Session").equalTo("sessionToken", req.query.sessionToken)
         let userId = await sessionQuery.first({useMasterKey : true})
         userId = userId.attributes.user.id
         let query = new Parse.Query("_User")
         query.equalTo("username", req.query.name)
         query.notEqualTo("objectId", userId)
-
+    }
+    catch {
+        res.status(400).send({"message": "Session token query failed"})
+    }
+    try {
         //to exclude existing friends or already sent friend requests
         let query1 = new Parse.Query("Friends").equalTo("fromName", req.query.name).equalTo("toUser", userId)
         let query2 = new Parse.Query("Friends").equalTo("toName", req.query.name).equalTo("fromUser", userId)
@@ -33,9 +41,10 @@ router.get('/users', async (req, res) => {
         }
         const user = await query.first({useMasterKey : true})
         res.status(200).send(user)
-    } catch (err) {
-        res.status(400).send({"error" : err })
+    } catch {
+        res.status(400).send({"message": "Couldn't query for existing friends."})
     }
+    
 })
 
 /**
@@ -53,7 +62,7 @@ router.get('/seeReqs/:sessionToken', async(req, res) => {
         let requests = await friendQuery.find()
         res.status(200).send(requests)
     } catch (err) {
-        res.status(400).send({"error" : err })
+        res.status(400).send({"message" : err })
     }
 })
 
@@ -67,6 +76,10 @@ router.post('/send/:sessionToken', async (req, res) => {
         const session = await query.first({useMasterKey : true})
         let userQuery = new Parse.Query("_User").equalTo("objectId", session.attributes.user.id)
         let user = await userQuery.first({useMasterKey : true})
+    } catch {
+        res.status(400).send({"message" : "Parse Query failed" })
+    }
+    try {   
         const Friend = Parse.Object.extend("Friends")
         let friend = new Friend()
         friend.set("fromUser", session.attributes.user.id)
@@ -76,9 +89,10 @@ router.post('/send/:sessionToken', async (req, res) => {
         friend.set("status", "pending")
         await friend.save()
         res.status(200).send(friend)
-    } catch (err) {
-        res.status(400).send({"message" : "Couldn't send friend request" })
+    } catch {
+        res.status(400).send({"message" : "Couldn't create new friend object" })
     }
+
 })
 
 /**
@@ -132,6 +146,10 @@ router.get('/list/:sessionToken', async (req, res) => {
         query.equalTo("sessionToken", req.params.sessionToken)
         let user = await query.first({useMasterKey : true})
         user = user.attributes.user.id
+    } catch {
+        res.status(400).send({"message" : "Session token query failed" })
+    }
+    try {
         let fromQuery = new Parse.Query("Friends")
         let toQuery = new Parse.Query("Friends")
         fromQuery.equalTo("fromUser", user)
@@ -141,8 +159,8 @@ router.get('/list/:sessionToken', async (req, res) => {
         let fromFriends = await fromQuery.find()
         let toFriends = await toQuery.find()
         res.status(200).send({"from": fromFriends, "to": toFriends})
-    } catch (err) {
-        res.status(400).send({"error" : err })
+    } catch {
+        res.status(400).send({"message" : "Friends query failed" })
     }
 })
 /**
