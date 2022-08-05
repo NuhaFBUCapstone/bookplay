@@ -5,6 +5,7 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import img from './refresh.png'
 import FriendBooks from "../FriendBooks/FriendBooks"
+import LiveChat from "../LiveChat/LiveChat"
 
 export default function Home({sessionToken}) {
     const [recents, setRecents] = useState([])
@@ -12,30 +13,35 @@ export default function Home({sessionToken}) {
     const [searchResults, setSearchResults] = useState({})
     const [pending, setPending] = useState([])
     const [friends, setFriends] = useState({})
-    const [recs, setRecs] = useState([])
     const [isSent, setIsSent] = useState(false)
     const [loading, setLoading] = useState(false)
     const [friendBooks, setFriendBooks] = useState([])
     const [selectedFriend, setSelectedFriend] = useState("")
     const [friendLoading, setFriendLoading] = useState(false)
+    const [sender, setSender] = useState("")
+    const [resultMessage, setResultMessage] = useState("")
 
     const message = () => {
         setIsSent(true)
         setTimeout(() => {setIsSent(false); setSearchResults({})}, 1200)
     }
     
-    async function getRecs() {
-        const response = await axios.get(`http://localhost:3001/recs/${sessionToken}`)
-        setRecs(response.data)
+    async function getName() {
+        const response = await axios.get(`http://localhost:3001/name/${sessionToken}`)
+        setSender(response.data)
     }
-
 
     async function getUsers() {
         if (!searchTerm) return
+        if (searchTerm===sender) {
+            setResultMessage("Can't Search for Yourself.")
+            return;
+        }
         setLoading(true)
         try { 
             const response = await axios.get(`http://localhost:3001/friends/users?name=${searchTerm}&sessionToken=${sessionToken}`)
             setSearchResults(response.data)
+            setResultMessage("No Results Found")
         } catch (err) {
             alert("Couldn't search for users")
         }
@@ -111,9 +117,9 @@ export default function Home({sessionToken}) {
     useEffect(() => {
         {if (sessionToken!==null) {
             getRecent()
-            getRecs()
             getFriends()
             seeRequests()
+            getName()
         }}
       },[])
 
@@ -142,11 +148,11 @@ export default function Home({sessionToken}) {
                             onChange={(e) => {setSearchTerm(e.target.value)}}>
                         </input>
                         <input type="submit" value="search" onClick={(e) => {e.preventDefault(); getUsers()}}/>
-                        <input type="reset" value="clear" onClick={(e) => {setSearchTerm(""); setSearchResults({})}}></input>
+                        <input type="reset" value="clear" onClick={(e) => {setSearchTerm(""); setResultMessage(""); setSearchResults({})}}></input>
                         <br/><br/>
                         <div className={isSent ? "colored" : "hidden"}> Sent request to {searchResults.username}!</div>
                         <div className={Object.keys(searchResults).length===0 ? "no-res" : "hidden"}>
-                            {loading ? "Loading..." : "No Results Found"}
+                            {loading ? "Loading..." : resultMessage}
                         </div>
                         <div className={Object.keys(searchResults).length!==0 ? "res" : "hidden"}>
                             {searchResults.username}, joined on {new Date(Date.parse(searchResults.createdAt)).toLocaleDateString()}
@@ -181,6 +187,7 @@ export default function Home({sessionToken}) {
                     </div>
                     <FriendBooks friendBooks={friendBooks} selectedFriend={selectedFriend} friendLoading={friendLoading}/>
                 </div>
+                {selectedFriend ? <LiveChat sender={sender} receiver={selectedFriend}/> : ""}
             </div>            
         </div>
     )
