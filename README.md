@@ -1,75 +1,67 @@
-# capstone
 
-**Product Spec**
+# Overview
+**Project Description**
+This website is a book cataloging app that allows users to search for books, organize their books into lists, create reviews and ratings, and see what their friends are reading. The website also creates individualized book recommendations based on a user’s positively-reviewed books and global ratings. I also incorporated the Spotify API to generate song recommendations based on any given book, using a combination of title and genre information.
 
-MVP:
- - search functionality with book detail page for each book
- - user can add/delete books from lists and add ratings and reviews
- - user can send and receive friend requests and view their current friends
- - users can get recommendations based off what their friends are reading
- - incorporates the Spotify API to create a playlist based off a **search term**.
- 
-Stretch:
- - incorporates the Spotify API to create a playlist based off a **book** and uses user's top songs.
- - users can directly recommend books to specific friends 
- - automatic login session timeout
- - content-based similarity recommendations for books
- - allow users to view their friends' saved books 
+**Features:**
 
-Technically Complex Components:
+Book Recommendations
+ - Popularity mapping algorithm using the user’s most recent positive review
+ - Incorporates global ratings 
+
+Spotify Playlist Generation
+- Use title and genre to find 5 random songs and generate recommendations based off that
+- Additional option to create a playlist out of the suggested songs and save to the user’s Spotify account
+
+Ratings and Reviews
+- Global ratings that are updated every time a user posts a rating
+- Reviews displayed to all viewers, can post reviews once you log in
+- Part of the Book Detail page
+
+Libraries (User-specific)
+- Add/remove books to lists
+- Create/delete new lists
+
+User authentication
+- Login
+- Create new account, requires password confirmation
+
+Home/Friends
+- View your recent activity
+- Option to send, receive, and accept friend requests
+- View what friends are currently reading
+- Live chat within Home page to talk to friends
+
+Book Detail Page
+
+- Use Google API to get images, synopsis, link to buy book, etc
+- Cache saved books in Parse database for quicker performance
+
+**Required Features**
+- Your app has multiple views
+	- logged in/logged out views
+	- Home, Landing Page, Search, My Library, Playlist Gen
+- Your app interacts with a database
+	- Parse database used for storing user data
+- You can log in/log out of your app as a user
+	- Login/Logout option for website and Spotify
+- Your app integrates with at least one SDK
+	- Google Books API, OpenLibrary API, Spotify API
+- Your app has an interesting cursor interaction 
+	- When hovering over books in your library, a delete button pops up for each book
+- Your app demonstrates at least one component with complex visual styling 
+	- Parallax screen, Book Detail page
+- Your app uses a loading state to create visual polish
+	- Playlist Generation Loading state, multiple loading states used throughout the website
+- Your app provides opportunities for you to overcome difficult/ambiguous technical problems
+	- Spotify book to song generation 
+	- Popularity-based book recommendations
+	- Live chatting with friends (Parse live queries)
+
+**Technically Complex Components:**
  - Recommendations
- 	- based off the books a user has read and compared to friends who have read those books to get recommendations (user-based, not content-based).
- - Friends' Lists
- 	- allow users to view their friends' saved books.
+ 	- based off the user's most recent positively reviewed book and compared to people who have also read that book to get recommendations.
+ - Friends' Books
+ 	- allow users to view what their friends are reading and chat with them.
  - Spotify playlist generation
  	- use multiple spotify API endpoints to create a song recommendation algorithm.
-
-**Components and Features**
-
- - Search
-		 - search by title or author
-		 - clicking on books takes you to a book detail page
-
- - Home
-		 - see recommendations from friends
-		 - recent activity
- - Landing Page
-		 - see showcase of trending books
-		 - Login/Signup option if not already logged in
-		 - About Us section
- - My Library
-		 - display user's lists (user specific information)
-		 - "read" list is already created for every user, other lists can be created
-		 - allow user to set/create public and private lists
-		 - see friends lists here?
- - Playlist
-		 - search for a book
-		 - user can add preferences/filters to search; for example they can check the instrumental box to get only instrumental songs
-		 - user can choose length of playlist
-		 - returns a list of songs 
-		 - allow option to create a Spotify playlist with the songs
- - Book Details
-		 - when clicking on a book from the search page or in My Library, a full book detail page opens
-		 - includes user rating + review along with synopsis, publication date, author, etc. 
-		 - allow option to add to a list
-		 - also include friends rating + reviews ?
- - Profile
-		 - see list of friends
-		 - user stats--how many pages and books read, average rating given, etc. (based off "read" list)
-		 - viewable from popup tab on upper right corner of screen
-		 - Logout option
-
-**Wireframes:** https://www.figma.com/file/Z8rZ9U3uHcNYSy41EQV7P6/goodreads?node-id=0%3A1
-
-**User Stories**
-
- 1. As a user, I want to be able to search by title or author.
- 2. As a user, I want to click on a book to get more details, so I can see a summary and rating information.
- 3. I want an option to choose whether the generated playlist contains strictly instrumental music since some users prefer that while reading. 
- 4. As a user, I want to write private notes about the books in my lists so I can remember certain things about them.
- 5. As a user, I want to see similar recommended books after I finish a book I liked.
- 6. As a user, I want to choose the approximate length of my generated playlist.
- 7. As a user, I want to have a profile page with stats like how many books/pages I've read, when I joined, etc.
- 8. As a user, I want to have a library page that contains all my lists and saved books.
- 9. As a user, I want to have an explore page where I can search for other books.
- 10. As a user, I want to have a header that contains a link to the home page, explore page, and playlist generation page.
