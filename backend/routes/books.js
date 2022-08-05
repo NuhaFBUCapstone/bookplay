@@ -33,6 +33,10 @@ router.post('/add/:id', async (req, res) => {
         query.equalTo("sessionToken", req.body.sessionToken)
         let objId = await query.first({useMasterKey : true})
         objId = objId.attributes.user.id
+    } catch {
+        res.status(400).send({"message" : "Session token query failed" })
+    }
+    try {
         let bookQuery = new Parse.Query("Books").equalTo("userId", objId)
         bookQuery.equalTo("bookId", req.params.id)
         bookQuery.equalTo("list", req.body.list)
@@ -42,6 +46,10 @@ router.post('/add/:id', async (req, res) => {
             res.status.send(checkBook);
             return;
         }
+    } catch {
+        res.status(400).send({"message" : "Book query failed" })
+    }
+    try {
         const Books = Parse.Object.extend("Books")
         let book = new Books()
         book.set("bookId", req.params.id)
@@ -56,10 +64,9 @@ router.post('/add/:id', async (req, res) => {
         book.set("ratingsCount", req.body.ratingsCount)
         await book.save()
         res.status(200).send(book)
-    } catch (err) {
-        res.status(400).send({"error" : "add failed. " + err })
+    } catch {
+        res.status(400).send({"message" : "Couldn't create new Book object" })
     }
-
 })
 function parseGenre(category) {
     if (category==="Fiction") return category

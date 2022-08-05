@@ -20,6 +20,10 @@ router.post('/add/:id', async (req, res) => {
         userQuery.equalTo("objectId", session.attributes.user.id)
         let user = await userQuery.first({useMasterKey : true})
         let username = user.attributes.username
+    } catch {
+        res.status(400).send({"message" : "Session token query failed" })
+    }
+    try {
         //create Review
         const Review = Parse.Object.extend("Reviews")
         let review = new Review()
@@ -32,7 +36,7 @@ router.post('/add/:id', async (req, res) => {
         if (req.body.rating!==0) updateAvgRating(req.params.id, req.body.rating)
         res.status(200).send(review)
     } catch (err) {
-        res.status(400).send({"error": err })
+        res.status(400).send({"message" : "Couldn't create Review Object" })
     }
 })
 
