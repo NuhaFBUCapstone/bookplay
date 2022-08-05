@@ -135,7 +135,6 @@ export default function Home({sessionToken}) {
                         </div>
                 })}
                 </div></div><br/>
-
                 <div className="friends">
                     <form className="search-friends">
                         <label htmlFor="search">Find new friends: </label>
@@ -182,20 +181,6 @@ export default function Home({sessionToken}) {
                     </div>
                     <FriendBooks friendBooks={friendBooks} selectedFriend={selectedFriend} friendLoading={friendLoading}/>
                 </div>
-                <div className="recents-title">
-                <h2>Recommendations</h2>
-                <p className={recs.length!==0? "show" : "hidden"}>People who read books you liked also read: </p>
-                <div className="recents-outer">
-                    <div className={recs.length!==0 ? "hidden" : "show"}>
-                        You haven't interacted with enough books to generate recommendations.
-                    </div>
-                    {recs?.map(b => {
-                        return <div className="recents" key={b.objectId}>
-                            <Link to={`/book/${b.bookId}`}><img className="recents-image" src={b.image}/><br/></Link>
-                            {b.title}<br/>
-                        </div>
-                    })}
-                </div></div>
             </div>            
         </div>
     )

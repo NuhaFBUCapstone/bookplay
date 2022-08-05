@@ -3,7 +3,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
-    width: 72%;
+    width: 70%;
     float: right;
     margin: 10px;
 }
@@ -19,7 +19,7 @@
 }
 .load {
     align-self: center;
-    width: 72%;
+    width: 70%;
     text-align: center;
 }
 .side {
@@ -46,8 +46,16 @@ button {
     background-color: rgb(255, 240, 221);
     border-width: 1px;
 }
-
-
+.rec-title {
+    padding-left: 50px;
+    width: 70%;
+}
+.recs-outer {
+    display: grid;
+    max-width: 570px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 22px
+}
 
 
 @media screen and (max-width: 1350px){
