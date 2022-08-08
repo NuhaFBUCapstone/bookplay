@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 var cors = require('cors');
 const Playlist = require("../models/playlist")
+const createPlaylist = require("../models/createPlaylist")
 const Parse = require('parse/node');
 
 router.use(cors())
@@ -20,6 +21,11 @@ router.post('/book/:search', async (req, res) => {
   const books = await bookQuery.find()
   res.status(200).send(books)
 
+})
+
+router.post('/create/:token', async (req, res) => {
+  await createPlaylist.createPlaylist(req.body.songs, req.body.title, req.params.token)
+  res.status(200).send("created")
 })
 
 module.exports = router
