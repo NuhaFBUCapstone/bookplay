@@ -9,17 +9,19 @@ router.use(cors())
  * create review and rating
  */
 router.post('/add/:id', async (req, res) => {
+    let userId = ""
+    let username = ""
     try {
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", req.body.sessionToken)
         let session = await query.first({useMasterKey : true})
         //get user id using session
-        let userId = session.attributes.user.id
+        userId = session.attributes.user.id
         //get username from user query
         let userQuery = new Parse.Query("_User")
         userQuery.equalTo("objectId", session.attributes.user.id)
         let user = await userQuery.first({useMasterKey : true})
-        let username = user.attributes.username
+        username = user.attributes.username
     } catch {
         res.status(400).send({"message" : "Session token query failed" })
     }

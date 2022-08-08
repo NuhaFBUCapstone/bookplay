@@ -43,7 +43,7 @@ export default function Home({sessionToken}) {
             setSearchResults(response.data)
             setResultMessage("No Results Found")
         } catch (err) {
-            alert("Couldn't search for users")
+            alert(err.response.data.message)
         }
         setLoading(false)
     }
@@ -83,8 +83,8 @@ export default function Home({sessionToken}) {
         try {
             const response = await axios.get(`http://localhost:3001/friends/list/${sessionToken}`)
             setFriends(response.data)
-        } catch {
-            alert("Couldn't load friends.")
+        } catch (err) {
+            alert(err.response.data.message)
         }
     }
     async function getFriendBooks(name) {
