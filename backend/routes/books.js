@@ -28,10 +28,11 @@ router.get('/recent/:sessionToken', async (req, res) => {
  * add a book to a list
  */
 router.post('/add/:id', async (req, res) => {
+    let objId = ""
     try {
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", req.body.sessionToken)
-        let objId = await query.first({useMasterKey : true})
+        objId = await query.first({useMasterKey : true})
         objId = objId.attributes.user.id
     } catch {
         res.status(400).send({"message" : "Session token query failed" })

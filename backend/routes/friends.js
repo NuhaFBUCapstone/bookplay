@@ -18,11 +18,13 @@ router.get('/users', async (req, res) => {
     } catch {
         res.status(400).send({"message": "Parse Query failed"})
     }
+    let userId = ""
+    let query = ""
     try {
         let sessionQuery = new Parse.Query("_Session").equalTo("sessionToken", req.query.sessionToken)
-        let userId = await sessionQuery.first({useMasterKey : true})
+        userId = await sessionQuery.first({useMasterKey : true})
         userId = userId.attributes.user.id
-        let query = new Parse.Query("_User")
+        query = new Parse.Query("_User")
         query.equalTo("username", req.query.name)
         query.notEqualTo("objectId", userId)
     }
@@ -70,12 +72,14 @@ router.get('/seeReqs/:sessionToken', async(req, res) => {
  * creates a new friend request
  */
 router.post('/send/:sessionToken', async (req, res) => {
+    let user = ""
+    let session = ""
     try {
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", req.params.sessionToken)
-        const session = await query.first({useMasterKey : true})
+        session = await query.first({useMasterKey : true})
         let userQuery = new Parse.Query("_User").equalTo("objectId", session.attributes.user.id)
-        let user = await userQuery.first({useMasterKey : true})
+        user = await userQuery.first({useMasterKey : true})
     } catch {
         res.status(400).send({"message" : "Parse Query failed" })
     }
@@ -141,15 +145,17 @@ router.post('/deny/:name', async(req, res) => {
  * get list of user's current friends
  */
 router.get('/list/:sessionToken', async (req, res) => {
+    let user = {}
     try {
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", req.params.sessionToken)
-        let user = await query.first({useMasterKey : true})
+        user = await query.first({useMasterKey : true})
         user = user.attributes.user.id
     } catch {
         res.status(400).send({"message" : "Session token query failed" })
     }
     try {
+        console.log(user)
         let fromQuery = new Parse.Query("Friends")
         let toQuery = new Parse.Query("Friends")
         fromQuery.equalTo("fromUser", user)
