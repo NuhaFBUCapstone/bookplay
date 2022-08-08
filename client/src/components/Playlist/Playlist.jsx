@@ -20,6 +20,7 @@ export default function Playlist({sessionToken, token, setToken}) {
     const [selectedBook, setSelectedBook] = useState({})
     const [instrumental, setInstrumental] = useState(0.5)
     const [useInstrumental, setUseInstrumental] = useState(false)
+    const [message, setMessage] = useState(false)
 
     useEffect(() => {
         const hash = window.location.hash 
@@ -70,6 +71,17 @@ export default function Playlist({sessionToken, token, setToken}) {
             alert("Couldn't search for books.")
         }
       }
+      async function sendToPlaylist(event) {
+        event.preventDefault();
+        const uris = songs.map(s => {
+            return s.uri
+        })
+        await axios.post(`http://localhost:3001/playlist/create/${token}`, {
+            "songs": uris, "title": selectedBook.title
+        })
+        setMessage(true)
+        setTimeout(() => {setMessage(false)}, 1200)
+      }
 
       return (
         <div className="playlist-outer">
@@ -79,11 +91,17 @@ export default function Playlist({sessionToken, token, setToken}) {
                 <Link to="/">Click to login</Link></div> :
         <div className="playlist">
                 <div className={token? "hidden" : "sp-log-in"}>
-                <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+                <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=playlist-modify-public playlist-modify-private`}>
                 Click here to log in to Spotify</a>
             </div>
             <div className={token? "sp-log-out" : "hidden"} onClick={logOut}>Log Out of Spotify</div>
             <div className="sp-show-title">{songs.length===0 ? "" : `Songs related to ${selectedBook.title}:`}</div>
+
+            <div className={songs.length===0 ? "hidden" : "sp-button"}>
+                <button onClick={(e) => sendToPlaylist(e)}>Send to Playlist!</button><br/>
+                <div className={message ? "message" : "hidden"}>Playlist Created!</div>
+            </div>
+
             <div className="sp-side">
                 <form className={token? "search": "hidden"}>
                     <input className="sp-bar" type="text" onChange={e => setSearch(e.target.value)}  placeholder="search for books in your library"/>
