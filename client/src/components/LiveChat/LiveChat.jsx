@@ -39,15 +39,16 @@ export default function LiveChat(props) {
 
   async function sendMessage() {
     try {
-      const messageText = messageInput;
-      // Create new Message object and save to Parse
-      let message = new Parse.Object("Messages");
-      message.set("text", messageText);
-      message.set("sender", props.sender);
-      message.set("receiver", props.receiver);
-      message.save();
-
-      setMessageInput("");
+        if (!messageInput) return;
+        const messageText = messageInput;
+        // Create new Message object and save to Parse
+        let message = new Parse.Object("Messages");
+        message.set("text", messageText);
+        message.set("sender", props.sender);
+        message.set("receiver", props.receiver);
+        message.save();
+        setMessageInput("");
+        reload()
     } catch (error) {
       alert(error);
     }
@@ -59,12 +60,12 @@ export default function LiveChat(props) {
   };
 
   return (
-    <div>
-      <div className="flex_between">
+    <div className="livechat">
+      {/* <div className="flex_between">
           <button
             onClick={reload}>reload         
             </button>
-      </div>
+      </div> */}
       {results && (
         <div className="messages">
           {results
@@ -90,23 +91,20 @@ export default function LiveChat(props) {
         </div>
       )}
       <div className="new_message">
-        <h2 className="new_message_title">New message</h2>
+        <h2 className="new_message_title">Send New Message</h2>
         <input
           className="form_input"
           value={messageInput}
           onChange={(event) => setMessageInput(event.target.value)}
-          placeholder={"Your message..."}
+          placeholder="Type here..."
           size="large"
         />
-        <button
-          type="primary"
+        <input
+          type="submit"
           className="form_button"
-          color={"#208AEC"}
-          size={"large"}
           onClick={sendMessage}
-        >
-          Send message
-        </button>
+          value="Send message"
+        />
       </div>
       <div>
         {isLoading && <p>{"Loading…"}</p>}

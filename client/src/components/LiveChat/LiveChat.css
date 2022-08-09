@@ -1,54 +1,4 @@
-html {
-    box-sizing: border-box;
-    outline: none;
-    overflow: auto;
-  }
-  
-  body {
-    margin: 0;
-    background-color: #fff;
-  }
-  
-  *,
-  *:before,
-  *:after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-  }
-  
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 0;
-    font-weight: bold;
-  }
-  
-  li {
-    list-style: none;
-  }
-  
-  p {
-    margin: 0;
-  }
-  
-  .flex_between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .list_heading {
-    font-weight: bold;
-  }
-  
-  .App {
-    text-align: center;
-  }
-  
+ 
   .container {
     width: 100%;
     max-width: 500px;
@@ -62,13 +12,7 @@ html {
     padding: 25px 0;
     background-color: #208AEC;
   }
-  
-  .header_logo {
-    height: 55px;
-    margin-bottom: 20px;
-    object-fit: contain;
-  }
-  
+
   .header_text_bold {
     margin-bottom: 3px;
     color: rgba(255, 255, 255, 0.9);
@@ -81,10 +25,6 @@ html {
     font-size: 15px;
   }
   
-  .heading {
-    font-size: 22px;
-  }
-  
   .form_wrapper {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -92,17 +32,21 @@ html {
   
   .form_input {
     margin-bottom: 20px;
+    padding: 6px;
+    border-radius: 7px;
+    margin-right: 5px;
+    width: 40%;
   }
   
   .form_button {
-    width: 100%;
+    width: 30%;
+    margin: auto;
+    padding: 6px;
+    border-radius: 7px;
+    background-color: rgb(217, 214, 231);
+    font-size: 14px;
   }
-  
-  .messages {
-    margin-top: 25px;
-    width: 50%;
-  }
-  
+
   .message_sent {
     position: relative;
     width: 50%;
@@ -115,14 +59,16 @@ html {
   }
   
   .message_bubble {
-    padding: 12px;
+    padding: 10px;
     border-radius: 25px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgb(217, 214, 231);
+    margin: 0;
   }
   
   .message_sent .message_bubble {
-    background-color: #1E88E5;
+    background-color: rgb(121, 104, 199);
     color: #fff;
+    margin: 0;
   }
   
   .message_time {
@@ -140,14 +86,19 @@ html {
   }
   
   .message_name {
-    margin-top: 5px;
     color: rgba(0, 0, 0, 0.55);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
+    margin: 0;
+    margin-top: 4px;
+    margin-bottom: 2px;
   }
   
   .message_sent .message_name {
     text-align: right;
+    margin: 0;
+    margin-top: 4px;
+    margin-bottom: 2px;
   }
   
   .new_message {
@@ -155,9 +106,15 @@ html {
     margin-top: 20px;
     margin-bottom: 10px;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
-    width: 50%;
   }
   
   .new_message_title {
     margin-bottom: 15px;
+    font-size: 25px;
+    font-family: serif;
+    color:rgb(64, 39, 104);
+  }
+  .livechat {
+    margin-right: 30%;
+    margin-left: 30%;
   }
